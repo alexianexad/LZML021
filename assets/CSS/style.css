@@ -1,0 +1,50 @@
+
+html {
+    background-color: #f5f5f5;
+    font-size: 14px;
+    max-width: 100%;
+}
+
+#page {
+    width: 80%;
+    margin: auto;
+    background-color: rgb(133, 171, 192);
+    border: 2px solid #5c72b1;
+    padding: 20px;
+}
+
+.entete {
+    text-align: center;
+    padding: 10px;
+}
+
+h1, h2 {
+    font-size: 1.8em;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    border: 1px solid black;
+    padding: 8px;
+    text-align: center;
+}
+
+/* About Me */
+#aboutme {
+    margin-top: 20px;
+}
+
+/* Pied de page */
+footer {
+    text-align: center;
+    margin-top: 20px;
+    font-weight: bold;
+    
+}
+button:hover {
+    background-color: #72dfd0;
+}
