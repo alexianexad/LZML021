@@ -1,0 +1,138 @@
+
+<!DOCTYPE html>
+	<html>
+		<head>
+			<meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1"> <!-- commenter -->
+			<link rel="stylesheet" href="assets/css/style.css">
+			<script src="assets/js/main.js"></script>
+			<script src="assets/js/canvasjs.min.js"></script>
+			<title>XXXX</title>
+			<link rel="icon" href="assets/img/XXX.png" type="image/icon type">
+		</head>
+        <body>
+        	<div id="page">
+        		<div class="entete">
+        			<div id="logo"><img src="assets/img/sorbonne-nouvelle-devise-trapezes.png" alt="logoSBN" width="20%" height="220%"></div> <!-- alt sert à afficher la description de l'image, si jamlis cette dernière n'est pas visualisée correctement par le navigateur -->
+                    <h1>VOTRE NOM</h1>
+                    <h2>UFR LLD,XXX campus Nation</h2> <!-- exemple de commentaire = heading=en-tête, de type 2  -->
+                    <img src="assets/img/XXX.png" alt="photo_profil" width="10%" height="10%">
+                </div>
+                <br><br><br>
+                <center><button id="button_aboutme" class="fade" onclick="showHide_aboutme()" >XXX</button></center> <!-- crée une fonction qui affiche/cache l'aide, centrée.. -->
+                 <br><br>
+                <div id="aboutme" style="xxx;">
+                	<p id="cv">
+                		<b>XXX :</b>
+                			<table>
+                				<thead>
+                					<tr><th>Années</th><th>Parcours</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>2023-2024</td><td>pXXX</td></tr>
+                                </tbody>
+                            </table>
+                    </p>
+                    <br>
+                    <p id="lectures">
+                    	<p><b>Liste de mes dernières lectures :</b></p>
+                    		<ol>
+                    			<li><i>AXXX</i>, XXX</li>
+                                
+                            </ol>
+                        </p>
+                        <p id="datetime">
+                            <button class="fade" onclick="datxxx()" id="btn1">Cliquez XXX</button>
+                            <button class="fade" onclick="xxx" id="xxx" style="display:none">Cliquez pour afficher en XXX</button> <!-- facultatif -->
+                            <p id="xxx"></p>
+                        </p>
+                </div>
+                <br>
+                <!-- Analyse des données dans un fichier -->
+                <div id="container">
+                    <h3 style="text-align:center;">Analyse des données dans un fichier</h3>
+                    <div id="page-wrapper">
+                <div>
+                    <center><button id="button_aide" class="fade" onclick="showHide_aide()">Afficher l'aide</button></center>
+                    <div id="aide" style="display:none;">
+                        <p><i>Voici un mode d'emploi :</i>
+                            <ul>
+                                <li>Etape 1 : Chargez un texte au format .txt à l'aide du bouton Parcourir.</li>
+                                <li>Etape 2 (facultatif) : Précisez les délimiteurs de votre choix puis cliquez sur le bouton Segmentation.</li>
+                                <li>Le bouton Dictionnaire : permet d'obtenir un tableau qui classe les tokens de façon décroissante en fonction du nombre d'occurences.</li>
+                                <li>Le bouton GREP : Entrez un pôle (une regex ou un mot) puis cliquez sur GREP pour obtenir le tableau des lignes d'occurences.</li>
+                                <li>Le bouton Concordancier : Entrez un pôle (une regex ou un mot) et une longueur de contexte puis cliquez sur Concordancier pour obtenir un tableau avec le contexte gauche et droit du pôle recherché.</li>
+                                <li>Le bouton Nombre de phrases : cliquez et il affichera le nombre de phrases.</li>
+                                <li>Le bouton Mots les plus longs : cliquez et il affichera les 10 mots les plus longs du texte.</li>
+                                <li>Le bouton Pie Chart : Saisissez des stopwords et cliquez sur le bouton pour afficher un graphique des 30 mots les plus fréquents dans le texte hors stopwords.</li>
+                                <li>Le bouton /kujuj/ : ajoute uj comme suffixe à chaque mot du texte chargé...</li>
+                            </ul>
+                        </p>
+                    </div>
+                </div>
+                </br>
+                <div>
+                    <span>
+                        <label for="fileInput" class="btn"><small>Sélectionner un fichier au format .txt :</small></label>
+                        <input id="fileInput" type="file" accept="text/plain" name="Fichier (.txt)" />
+                    </span>
+                </div>
+                <br />
+                <p style="text-align:center;">
+                    <small>
+                        <label for="delimID" class="mylabel">Délimiteur(s)</label>
+                        &nbsp; <!-- commenter -->
+                        <input type="text" value=" ,;’'~|&#@=`%*$()[]{}_:+«»§\/" name="delim" id="delimID" size="40" />
+                    </small>
+                    <br />
+                    <small>
+                        <label for="poleID" class="mylabel">Pôle</label>
+                        &nbsp;
+                        <input type="text" placeholder="entrez un pôle..." name="pole" id="poleID" size="20" />
+                    </small>
+                    &nbsp;
+                    <small>
+                        <label for="lgID" class="mylabel">Longueur</label>
+                        &nbsp;
+                        <input type="text" value="10" name="lg" id="lgID" size="10" />
+                    </small>
+                    <br/>
+                    <small>
+                        <label for="stopwordID" class="mylabel">mots grammaticaux, Stopwords en anglais)</label>
+                        &nbsp;
+                        <input type="text" value="de,le,la,les,à,et,des,un,une,du,que,en,l,que,qu,d,s,se,ne,n,ce,me,sa" name="stopwords" id="stopwordID" size="60" />
+                    </small>
+                    <br />
+                    <br />
+                    <button class="special" onclick="alert('Voici un site qui permet d\'analyser des textes.');"><span>Bonjour</span></button> <!-- commenter -->
+                    <br />
+                    <br />
+                    <button onclick="segText()"><span>Segmentation</span></button>
+                    <button class="purple" id="btnDict" onclick="dictionnaire()"><span>Dictionnaire</span></button>
+                    <button class="fade" id="btnGrep" onclick="grep()"><span>GREP</span></button>
+                    <button class="fade" onclick="concord()"><span>XXXX</span></button>
+                    <button class="fade" onclick="kujuj()"><span>/kujuj/</span></button>
+                    <button class="fade" onclick="nbPhrases()"><span>Nombre de phrases</span></button>
+                    <button class="fade" onclick="tokenLong()">Mots les plus longs</button>
+                    <button class="fad" onclick="pieChart()"><span>grapheCamembert-Pie Chart</span></button>
+                </p>
+            </div>
+            <center>
+            <div id="logger1" style="width:100%"></div>
+            <div id="logger2" style="width:100%"></div>
+            <div id="logger3" style="width:100%"></div>
+            </center>
+            <br/>
+            <div id="Global">
+                <div id="fileDisplayArea"></div>
+                <div id="page-analysis"></div>
+                <div id="chartContainer" style="height: 300px; width: 100%;"></div>
+            </div>
+        </div>
+                <!-- FIN Analyse des données dans un fichier -->
+                <footer>
+                <br><br>
+                	<a href="htp://www.univ-paris3.fr/" class="rainbowBtn">xx</a>
+                <br>
+                </footer>
+        </body>
+    </html>
