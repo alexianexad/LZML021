@@ -1,0 +1,151 @@
+function demanderNom() {
+    let nom = prompt("Quel est votre nom ?");
+    if (nom) {
+        alert("Bonjour, " + nom + " !");
+    } else {
+        alert("Vous n'avez pas entré de nom.");
+    }
+}
+
+function afficherAide() {
+    const aide = `
+Fonctionnalités disponibles :
+1. Charger un texte : segmentation en tokens et lignes.
+2. Dictionnaire : fréquence des mots.
+3. Grep : recherche dans les lignes.
+4. Concordancier : contexte autour d'un mot.
+5. Mots de 5 lettres : filtre des mots de longueur 5.`;
+    alert(aide);
+}
+
+function segmenter() {
+    let texte = document.getElementById("texte").value;
+    let tokens = texte.trim().split(/\s+/);
+    let table = document.createElement("table");
+
+    tokens.forEach(mot => {
+        let row = document.createElement("tr");
+        row.innerHTML = "<td>" + mot + "</td>";
+        table.appendChild(row);
+    });
+
+    const output = document.getElementById("exercice4Resultat");
+    output.innerHTML = "";
+    output.appendChild(table);
+}
+
+function segmenterTexte() {
+    const fileInput = document.getElementById("fileInput");
+    const delimiters = document.getElementById("delimID").value;
+    const displayArea = document.getElementById("page-analysis");
+
+    if (!fileInput.files.length) {
+        alert("Veuillez sélectionner un fichier !");
+        return;
+    }
+
+    const file = fileInput.files[0];
+    const reader = new FileReader();
+
+    reader.onload = function (event) {
+        let text = event.target.result;
+        let regex = new RegExp("[" + delimiters.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&") + "]+", "g");
+        let segments = text.split(regex).filter(segment => segment.trim() !== "");
+        displayArea.innerHTML = "<h3>Résultat :</h3><p>" + segments.join("<br>") + "</p>";
+    };
+
+    reader.readAsText(file);
+}
+
+let tokens = [];
+let lignes = [];
+
+function chargerTexte() {
+    const texte = document.getElementById("texte").value.trim();
+    if (!texte) {
+        alert("Veuillez d'abord coller un texte.");
+        return;
+    }
+
+    tokens = texte.split(/\s+/);
+    lignes = texte.split(/\n/).filter(l => l.trim() !== "");
+    alert(`Fichier chargé avec ${tokens.length} mots et ${lignes.length} lignes.`);
+}
+
+function dictionnaire() {
+    if (tokens.length === 0) {
+        alert("Erreur : aucun texte chargé.");
+        return;
+    }
+
+    const freq = {};
+    tokens.forEach(token => {
+        const t = token.toLowerCase();
+        freq[t] = (freq[t] || 0) + 1;
+    });
+
+    const sorted = Object.entries(freq).sort((a, b) => b[1] - a[1]);
+    const output = document.getElementById("resultats");
+    output.innerHTML = "<h3>Dictionnaire</h3><table><tr><th>Mot</th><th>Fréquence</th></tr>" +
+        sorted.map(([mot, nb]) => `<tr><td>${mot}</td><td>${nb}</td></tr>`).join("") + "</table>";
+}
+
+function grep() {
+    if (lignes.length === 0) {
+        alert("Erreur : aucun texte chargé.");
+        return;
+    }
+
+    const motif = document.getElementById("motif").value;
+    if (!motif) {
+        alert("Veuillez entrer un motif.");
+        return;
+    }
+
+    const regex = new RegExp(motif, "gi");
+    const output = document.getElementById("resultats");
+
+    const matches = lignes.map(ligne =>
+        regex.test(ligne)
+            ? `<p>${ligne.replace(regex, match => `<span style="color:red">${match}</span>`)}</p>`
+            : null
+    ).filter(Boolean);
+
+    output.innerHTML = "<h3>Résultats GREP</h3>" + matches.join("");
+}
+
+function concordancier() {
+    if (tokens.length === 0) {
+        alert("Erreur : aucun texte chargé.");
+        return;
+    }
+
+    const pôle = document.getElementById("concInput").value;
+    if (!pôle) {
+        alert("Veuillez entrer un mot.");
+        return;
+    }
+
+    const regex = new RegExp(`(.{0,30})(${pôle})(.{0,30})`, "gi");
+    const texte = document.getElementById("texte").value;
+    const matches = [...texte.matchAll(regex)];
+
+    const lignesHTML = matches.map(m =>
+        `<tr><td>${m[1]}</td><td><strong>${m[2]}</strong></td><td>${m[3]}</td></tr>`
+    );
+
+    const output = document.getElementById("resultats");
+    output.innerHTML = "<h3>Concordancier</h3><table><tr><th>Gauche</th><th>Pôle</th><th>Droite</th></tr>" +
+        lignesHTML.join("") + "</table>";
+}
+
+function mots5lettres() {
+    if (tokens.length === 0) {
+        alert("Erreur : aucun texte chargé.");
+        return;
+    }
+
+    const mots = tokens.filter(t => t.length === 5);
+    document.getElementById("resultats").innerHTML =
+        "<h3>Mots de 5 lettres</h3><p>" + mots.join(", ") + "</p>";
+}
