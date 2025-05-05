@@ -1,81 +1,97 @@
-
 <!DOCTYPE html>
-	<html>
-		<head>
-			<meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1"> <!-- commenter -->
-			<link rel="stylesheet" href="assets/css/style.css">
-			<script src="assets/js/main.js"></script>
-			<script src="assets/js/canvasjs.min.js"></script>
-			<title>Alexiane A</title>
-			<link rel="icon" href="assets/img/logo-sorbonne-nouvelle.jpg" type="image/icon type"> <!-- Icon de la page à changé -->
-		</head>
-        <body>
-        	<div id="page">
-        		<div class="entete">
-        			<div id="logo"><img src="assets/img/logo-sorbonne-nouvelle.jpg" alt="logoSBN" width="20%" height="220%"></div> <!-- alt sert à afficher la description de l'image, si jamlis cette dernière n'est pas visualisée correctement par le navigateur -->
-                    <h1>Alexiane A</h1>
-                    <h2>Licence 3 Sciences du langage campus Nation</h2> <!-- exemple de commentaire = heading=en-tête, de type 2  -->
-                    <img src="assets/img/language-des-fleurs-8.webp" alt="photo_profil" width="10%" height="10%">
-                </div>
-                <br><br><br>
-                <center><button id="button_aboutme" class="fade" onclick="showHide_aboutme()" >XXX</button></center> <!-- crée une fonction qui affiche/cache l'aide, centrée.. -->
-                 <br><br>
-                <div id="aboutme" style="xxx;">
-                	<p id="cv">
-                		<b>Année universitaire :</b>
-                			<table>
-                				<thead>
-                					<tr><th>Années</th><th>Parcours</th></tr>
-                                </thead>
-                                <tbody>
+<html>
+<head>
+    <meta charset="UTF-8"> <!-- encodage des caractères -->
+    <meta name="viewport" content="width=device-width, initial-scale=1"> <!-- permet l’adaptation sur mobile -->
+    <link rel="stylesheet" href="assets/css/style.css"> <!-- lien vers le fichier CSS -->
+    <script src="assets/js/main.js"></script> <!-- script principal contenant toutes les fonctions JS -->
+    <script src="assets/js/canvasjs.min.js"></script> <!-- librairie pour les graphiques (pie chart) -->
+    <title>Alexiane A</title> <!-- titre de la page -->
+    <link rel="icon" href="assets/img/logo-sorbonne-nouvelle.jpg" type="image/icon type"> <!-- icône de l'onglet -->
+</head>
+<body>
+    <div id="page">
+        <!-- bandeau d'entête avec image, titre, sous-titre et photo -->
+        <div class="entete">
+            <div id="logo">
+                <img src="assets/img/logo-sorbonne-nouvelle.jpg" alt="logoSBN" width="20%" height="220%">
+            </div>
+            <h1>Alexiane A</h1>
+            <h2>Licence 3 Sciences du langage campus Nation</h2>
+            <img src="assets/img/language-des-fleurs-8.webp" alt="photo_profil" width="10%" height="10%">
+        </div>
+        <br><br><br>
+
+        <!-- crée une fonction qui affiche/cache la section "à propos de moi", centrée -->
+        <center>
+            <button id="button_aboutme" class="fade" onclick="showHide_aboutme()">À propos de moi</button>
+        </center>
+
+        <!-- contenu à afficher/masquer (détails sur l’étudiante) -->
+        <br><br>
+        <div id="aboutme" style="display:none;">
+            <p id="cv">
+                <b>Année universitaire :</b>
+                <!-- tableau HTML pour présenter les années -->
+                <table>
+                    <thead>
+                        <tr><th>Années</th><th>Parcours</th></tr>
+                    </thead>
+                    <tbody>
                         <tr><td>2024-2025</td><td>3ème année universitaire</td></tr>
                         <tr><td>2023-2024</td><td>2ème année universitaire</td></tr>
                         <tr><td>2022-2023</td><td>1ère année universitaire</td></tr>
-                                </tbody>
-                            </table>
-                    </p>
-                    <br>
-                    <p id="lectures">
-                    	<p><b>Voici les cinq derniers livres que j'ai lus :</b></p>
-                    		<ol>
+                    </tbody>
+                </table>
+            </p>
+            <br>
+            <p id="lectures">
+                <!-- liste ordonnée des derniers livres lus -->
+                <b>Voici les cinq derniers livres que j'ai lus :</b>
+                <ol>
                     <li><i>Ce que le jour doit à la nuit</i>, Yasmina Khadra, Pocket</li>
                     <li><i>Jamais plus</i>, Colleen Hoover, Hugo Roman</li>
                     <li><i>Steelstriker</i>, Marie Lu, Éditions Milan</li>
                     <li><i>Witch and God</i>, Liv Stone, Broché</li>
                     <li><i>Le prince cruel</i>, Holly Black, Le Livre de Poche</li>
-                                
-                            </ol>
-                        </p>
-                        <p id="datetime">
-                            <button class="fade" onclick="datxxx()" id="btn1">Cliquez XXX</button>
-                            <button class="fade" onclick="xxx" id="xxx" style="display:none">Cliquez pour afficher en XXX</button> <!-- facultatif -->
-                            <p id="xxx"></p>
-                        </p>
-                </div>
-                <br>
-                <!-- Analyse des données dans un fichier -->
-                <div id="container">
-                    <h3 style="text-align:center;">Analyse des données dans un fichier</h3>
-                    <div id="page-wrapper">
+                </ol>
+            </p>
+            <p id="datetime">
+                <!-- boutons successifs pour afficher la date puis l'heure -->
+                <button class="fade" onclick="afficherDateHeure()" id="btn1">Cliquez pour afficher la date</button>
+                <button class="fade" onclick="afficherHeure()" id="btn2" style="display:none">Cliquez pour afficher l'heure</button>
+                <p id="outputDateHeure"></p> <!-- zone d'affichage du résultat -->
+            </p>
+        </div>
+        <br>
+
+        <!-- section principale d’analyse de texte -->
+        <div id="container">
+            <h3 style="text-align:center;">Analyse des données dans un fichier</h3>
+            <div id="page-wrapper">
+
+                <!-- crée une fonction qui affiche/cache l'aide, centrée -->
                 <div>
                     <center><button id="button_aide" class="fade" onclick="showHide_aide()">Afficher l'aide</button></center>
                     <div id="aide" style="display:none;">
-                        <p><i>Voici un mode d'emploi :</i>
-                            <ul>
-                                <li>Etape 1 : Chargez un texte au format .txt à l'aide du bouton Parcourir.</li>
-                                <li>Etape 2 (facultatif) : Précisez les délimiteurs de votre choix puis cliquez sur le bouton Segmentation.</li>
-                                <li>Le bouton Dictionnaire : permet d'obtenir un tableau qui classe les tokens de façon décroissante en fonction du nombre d'occurences.</li>
-                                <li>Le bouton GREP : Entrez un pôle (une regex ou un mot) puis cliquez sur GREP pour obtenir le tableau des lignes d'occurences.</li>
-                                <li>Le bouton Concordancier : Entrez un pôle (une regex ou un mot) et une longueur de contexte puis cliquez sur Concordancier pour obtenir un tableau avec le contexte gauche et droit du pôle recherché.</li>
-                                <li>Le bouton Nombre de phrases : cliquez et il affichera le nombre de phrases.</li>
-                                <li>Le bouton Mots les plus longs : cliquez et il affichera les 10 mots les plus longs du texte.</li>
-                                <li>Le bouton Pie Chart : Saisissez des stopwords et cliquez sur le bouton pour afficher un graphique des 30 mots les plus fréquents dans le texte hors stopwords.</li>
-                                <li>Le bouton /kujuj/ : ajoute uj comme suffixe à chaque mot du texte chargé...</li>
-                            </ul>
-                        </p>
+                        <p><i>Voici un mode d'emploi :</i></p>
+                        <ul>
+                            <!-- instructions pour chaque bouton -->
+                            <li>Étape 1 : Chargez un texte au format .txt à l'aide du bouton Parcourir.</li>
+                            <li>Étape 2 (facultatif) : Précisez les délimiteurs de votre choix puis cliquez sur le bouton Segmentation.</li>
+                            <li><b>Dictionnaire</b> : tableau des tokens par fréquence décroissante.</li>
+                            <li><b>GREP</b> : entrer un pôle (mot ou regex) pour afficher les lignes d’occurrences.</li>
+                            <li><b>Concordancier</b> : entrer un pôle et un contexte (gauche/droit).</li>
+                            <li><b>Nombre de phrases</b> : affiche le nombre de phrases.</li>
+                            <li><b>Mots les plus longs</b> : affiche les 10 mots les plus longs.</li>
+                            <li><b>Pie Chart</b> : entrez des stopwords, affiche les 30 mots les plus fréquents hors stopwords.</li>
+                            <li><b>/kujuj/</b> : ajoute “uj” à chaque mot du texte.</li>
+                        </ul>
                     </div>
                 </div>
-                </br>
+
+                <!-- champ pour sélectionner un fichier .txt -->
+                <br />
                 <div>
                     <span>
                         <label for="fileInput" class="btn"><small>Sélectionner un fichier au format .txt :</small></label>
@@ -83,63 +99,70 @@
                     </span>
                 </div>
                 <br />
+
+                <!-- champs pour réglages et options -->
                 <p style="text-align:center;">
                     <small>
+                        <!-- permet de choisir des séparateurs pour la segmentation -->
                         <label for="delimID" class="mylabel">Délimiteur(s)</label>
-                        &nbsp; <!-- commenter -->
                         <input type="text" value=" ,;’'~|&#@=`%*$()[]{}_:+«»§\/" name="delim" id="delimID" size="40" />
                     </small>
                     <br />
                     <small>
+                        <!-- zone de saisie pour un pôle -->
                         <label for="poleID" class="mylabel">Pôle</label>
-                        &nbsp;
                         <input type="text" placeholder="entrez un pôle..." name="pole" id="poleID" size="20" />
                     </small>
                     &nbsp;
                     <small>
+                        <!-- réglage de la longueur des contextes -->
                         <label for="lgID" class="mylabel">Longueur</label>
-                        &nbsp;
                         <input type="text" value="10" name="lg" id="lgID" size="10" />
                     </small>
-                    <br/>
+                    <br />
                     <small>
-                        <label for="stopwordID" class="mylabel">mots grammaticaux, Stopwords en anglais)</label>
-                        &nbsp;
+                        <!-- liste des stopwords exclus du diagramme -->
+                        <label for="stopwordID" class="mylabel">Mots grammaticaux (stopwords)</label>
                         <input type="text" value="de,le,la,les,à,et,des,un,une,du,que,en,l,que,qu,d,s,se,ne,n,ce,me,sa" name="stopwords" id="stopwordID" size="60" />
                     </small>
-                    <br />
-                    <br />
-                    <button class="special" onclick="alert('Voici un site qui permet d\'analyser des textes.');"><span>Bonjour</span></button> <!-- commenter -->
-                    <br />
-                    <br />
-                    <button onclick="segText()"><span>Segmentation</span></button>
-                    <button class="purple" id="btnDict" onclick="dictionnaire()"><span>Dictionnaire</span></button>
-                    <button class="fade" id="btnGrep" onclick="grep()"><span>GREP</span></button>
-			<button onclick="remplacerVoyelles()">Remplacer voyelles</button>
-                    <button class="fade" onclick="concord()"><span>Concordance</span></button>
-                    <button class="fade" onclick="kujuj()"><span>/kujuj/</span></button>
-                    <button class="fade" onclick="nbPhrases()"><span>Nombre de phrases</span></button>
-                    <button class="fade" onclick="tokenLong()">Mots les plus longs</button>
-                    <button class="fad" onclick="pieChart()"><span>grapheCamembert-Pie Chart</span></button>
+
+                    <!-- boutons pour chaque fonction -->
+                    <br /><br />
+                    <!-- alerte simple de bienvenue -->
+                    <button class="special" onclick="alert('Voici un site qui permet d\'analyser des textes.');"><span>Bonjour</span></button>
+                    <br /><br />
+                    <button onclick="segText()"><span>Segmentation</span></button> <!-- segmentation du texte -->
+                    <button class="purple" id="btnDict" onclick="dictionnaire()"><span>Dictionnaire</span></button> <!-- dictionnaire des formes -->
+                    <button class="fade" id="btnGrep" onclick="grep()"><span>GREP</span></button> <!-- recherche de motifs -->
+                    <button onclick="remplacerVoyelles()">Remplacer voyelles</button> <!-- remplace les voyelles -->
+                    <button class="fade" onclick="concord()"><span>Concordance</span></button> <!-- affiche les contextes -->
+                    <button class="fade" onclick="kujuj()"><span>/kujuj/</span></button> <!-- ajoute uj à chaque mot -->
+                    <button class="fade" onclick="nbPhrases()"><span>Nombre de phrases</span></button> <!-- compte les phrases -->
+                    <button class="fade" onclick="tokenLong()"><span>Mots les plus longs</span></button> <!-- top 10 mots les plus longs -->
+                    <button class="fade" onclick="pieChart()"><span>grapheCamembert-Pie Chart</span></button> <!-- camembert des mots -->
                 </p>
             </div>
+
+            <!-- zones pour afficher les résultats -->
             <center>
-            <div id="logger1" style="width:100%"></div>
-            <div id="logger2" style="width:100%"></div>
-            <div id="logger3" style="width:100%"></div>
+                <div id="logger1" style="width:100%"></div> <!-- logger dictionnaire -->
+                <div id="logger2" style="width:100%"></div> <!-- logger concordancier -->
+                <div id="logger3" style="width:100%"></div> <!-- logger grep -->
             </center>
-            <br/>
+            <br />
             <div id="Global">
-                <div id="fileDisplayArea"></div>
-                <div id="page-analysis"></div>
-                <div id="chartContainer" style="height: 300px; width: 100%;"></div>
+                <div id="fileDisplayArea"></div> <!-- texte chargé -->
+                <div id="page-analysis"></div> <!-- zone de résultats -->
+                <div id="chartContainer" style="height: 300px; width: 100%;"></div> <!-- graphique camembert -->
             </div>
         </div>
-                <!-- FIN Analyse des données dans un fichier -->
-                <footer>
-                <br><br>
-                	<a href="htp://www.univ-paris3.fr/" class="rainbowBtn">xx</a>
-                <br>
-                </footer>
-        </body>
-    </html>
+
+        <!-- pied de page -->
+        <footer>
+            <br><br>
+            <a href="http://www.univ-paris3.fr/" class="rainbowBtn">Université Paris 3</a>
+            <br>
+        </footer>
+    </div>
+</body>
+</html>
