@@ -137,10 +137,10 @@ function handleFileSelect(event) {
     const text = e.target.result; // contenu du fichier texte
     document.getElementById("holder1").innerText = text; // on l'affiche dans la zone holder1
 
-    // ➕ Tu peux stocker le texte dans une variable globale si besoin :
+    // Tu peux stocker le texte dans une variable globale si besoin :
     texteOriginal = text;
 
-    // ➕ Appeler ici segmentation automatique ou d'autres traitements :
+    // Appeler ici segmentation automatique ou d'autres traitements :
     segText(); // segmentation automatique si souhaitée
   };
   reader.readAsText(file); // on lit le fichier en tant que texte
@@ -228,4 +228,4 @@ function concord() {
     } else {
         document.getElementById("page-analysis").innerHTML = resultat;
     }
-}
+} //cotév analyse
