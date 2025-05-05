@@ -107,3 +107,18 @@ function genererConcordancier() {
     document.getElementById("zone_affichage").innerHTML = "<p>Erreur de motif.</p>"; // Si erreur dans la RegExp
   }
 }
+
+// Fonction 8 : remplacer toutes les voyelles par "/" et compter combien il y en avait
+function remplacerVoyelles() {
+  const texte = document.getElementById("zone_texte").value; // On récupère le texte dans la zone
+  const voyelles = texte.match(/[aeiouyAEIOUY]/g); // On cherche toutes les voyelles (g = global, pour les prendre toutes)
+
+  const nbVoyelles = voyelles ? voyelles.length : 0; // On compte combien il y en a (si aucun match, on met 0)
+  
+  // On remplace toutes les voyelles par des "/"
+  const texteModifie = texte.replace(/[aeiouyAEIOUY]/g, "/");
+
+  // On affiche le texte modifié et le nombre de voyelles remplacées
+  const sortie = `<p>Texte modifié :</p><pre>${texteModifie}</pre><p>Nombre de voyelles remplacées : ${nbVoyelles}</p>`;
+  document.getElementById("zone_affichage").innerHTML = sortie;
+}
