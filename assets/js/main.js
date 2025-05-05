@@ -31,6 +31,18 @@ function showHide_aboutme() {
 	}
 }
 
+function showHide_aide() {
+    const aide = document.getElementById("aide");
+    const bouton = document.getElementById("button_aide");
+    if (aide.style.display === "none" || aide.style.display === "") {
+        aide.style.display = "block";
+        bouton.textContent = "Masquer l'aide";
+    } else {
+        aide.style.display = "none";
+        bouton.textContent = "Afficher l'aide";
+    }
+}
+
 // Charger un fichier texte -----------------------------------------------------------------------
 function loadFile(event) {
 	let reader = new FileReader();
