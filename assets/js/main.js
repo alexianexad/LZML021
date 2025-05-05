@@ -54,7 +54,12 @@ function afficherDateHeure() {
     document.getElementById("btn2").style.display = "inline";
 }
 
-
+// Fonction qui affiche l’heure
+function afficherHeure() {
+    const now = new Date();
+    const heure = now.toLocaleTimeString("fr-FR"); // Format heure français
+    document.getElementById("outputDateHeure").textContent += "\nHeure : " + heure;
+}
 // Charger un fichier texte -----------------------------------------------------------------------
 function loadFile(event) {
 	let reader = new FileReader();
