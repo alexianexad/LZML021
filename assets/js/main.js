@@ -76,15 +76,32 @@ function loadFile(event) {
 
 	reader.readAsText(event.target.files[0]);
 }
-
+//pour segmenter j'ai un un proble de segmentation ca segmentait tous en un seul bloc
 function segText() {
-    // Récupérer le texte du fichier affiché
-    const text = document.getElementById("fileDisplayArea").textContent;
+    const fileDisplayArea = document.getElementById('fileDisplayArea');
+    const delimInput = document.getElementById("delimID").value;
 
-    if (!text) {
-        alert("Veuillez d'abord charger un fichier.");
+    if (!window.fullText) {
+        fileDisplayArea.innerHTML = "<p style='color:red;'>Veuillez d'abord charger un fichier texte.</p>";
         return;
     }
+
+    // Création d'une expression régulière avec les délimiteurs saisis
+    const delimiters = delimInput.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&'); // échappe les caractères spéciaux
+    const regex = new RegExp(`[${delimiters}\\s]+`, "g"); // inclut les espaces comme délimiteurs
+
+    // Découpe du texte en tokens (mots) avec les délimiteurs
+    window.tokens = window.fullText.split(regex).filter(token => token.length > 0); // enlève les vides
+    window.lignes = window.fullText.split(/\r?\n/).filter(ln => ln.trim() !== ""); // lignes non vides
+
+    // Affichage des résultats
+    fileDisplayArea.innerHTML = `
+        <p><b>Nombre de tokens (mots) :</b> ${tokens.length}</p>
+        <p><b>Nombre de lignes non vides :</b> ${lignes.length}</p>
+        <p><b>Extrait des tokens :</b> ${tokens.slice(0, 20).join(", ")}...</p>
+    `;
+}
+
 
     // Récupérer les délimiteurs qu'on a
     const delim = document.getElementById("delimID").value;
