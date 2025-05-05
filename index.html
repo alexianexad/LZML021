@@ -2,40 +2,40 @@
 <html>
 <head>
     <meta charset="UTF-8"> <!-- encodage des caractères -->
-    <meta name="viewport" content="width=device-width, initial-scale=1"> <!-- permet l’adaptation sur mobile -->
+    <meta name="viewport" content="width=device-width, initial-scale=1"> <!-- permet l’adaptation sur téléphone -->
     <link rel="stylesheet" href="assets/css/style.css"> <!-- lien vers le fichier CSS -->
-    <script src="assets/js/main.js"></script> <!-- script principal contenant toutes les fonctions JS -->
-    <script src="assets/js/canvasjs.min.js"></script> <!-- librairie pour les graphiques (pie chart) -->
+    <script src="assets/js/main.js"></script> <!-- liens scripts vers les fonctions css-->
+    <script src="assets/js/canvasjs.min.js"></script> <!-- graphique liens si ca marche-->
     <title>Alexiane A</title> <!-- titre de la page -->
     <link rel="icon" href="assets/img/logo-sorbonne-nouvelle.jpg" type="image/icon type"> <!-- icône de l'onglet -->
 </head>
 <body>
     <div id="page">
-        <!-- bandeau d'entête avec image, titre, sous-titre et photo -->
+        <!-- entête avec image, titre, sous-titre et photo si il y en a une-->
         <div class="entete">
             <div id="logo">
                 <img src="assets/img/logo-sorbonne-nouvelle.jpg" alt="logoSBN" width="20%" height="220%">
-            </div>
+            </div> <!-- insération logo photo-->
             <h1>Alexiane A</h1>
             <h2>Licence 3 Sciences du langage campus Nation</h2>
             <img src="assets/img/language-des-fleurs-8.webp" alt="photo_profil" width="10%" height="10%">
-        </div>
+        </div> <!-- insération photo de photo-->
         <br><br><br>
 
-        <!-- crée une fonction qui affiche/cache la section "à propos de moi", centrée -->
+        <!-- crée une fonction qui affiche/cache la section "à propos de moi"  + centrée-->
         <center>
             <button id="button_aboutme" class="fade" onclick="showHide_aboutme()">À propos de moi</button>
         </center>
 
-        <!-- contenu à afficher/masquer (détails sur l’étudiante) -->
+        <!-- contenu à affichermasquer et masqué comme le cv et les livres lu-->
         <br><br>
         <div id="aboutme" style="display:none;">
             <p id="cv">
                 <b>Année universitaire :</b>
                 <!-- tableau HTML pour présenter les années -->
-                <table>
+                <table> <!-- pour faire un tableau-->
                     <thead>
-                        <tr><th>Années</th><th>Parcours</th></tr>
+                        <tr><th>Années</th><th>Parcours</th></tr> <!-- titre du tableau-->
                     </thead>
                     <tbody>
                         <tr><td>2024-2025</td><td>3ème année universitaire</td></tr>
@@ -48,7 +48,7 @@
             <p id="lectures">
                 <!-- liste ordonnée des derniers livres lus -->
                 <b>Voici les cinq derniers livres que j'ai lus :</b>
-                <ol>
+                <ol> <!-- Sert à faire une liste-->
                     <li><i>Ce que le jour doit à la nuit</i>, Yasmina Khadra, Pocket</li>
                     <li><i>Jamais plus</i>, Colleen Hoover, Hugo Roman</li>
                     <li><i>Steelstriker</i>, Marie Lu, Éditions Milan</li>
