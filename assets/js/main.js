@@ -192,28 +192,53 @@ function grep() {
 }
 
 
-// Concordancier (contexte gauche/pôle/droit) ---------------------------------------------------
 function concord() {
-	if (!window.lignes) {
-		document.getElementById("logger1").innerHTML = "Erreur : aucun fichier chargé.";
-		return;
-	}
-	let mot = prompt("Mot à chercher ?");
-	if (!mot) {
-		document.getElementById("logger1").innerHTML = "Erreur : aucun mot fourni.";
-		return;
-	}
-	let regex = new RegExp(`(.{0,30})\\b(${mot})\\b(.{0,30})`, "gi");
-	let html = "<table><tr><th>Contexte gauche</th><th>Mot</th><th>Contexte droit</th></tr>";
-	for (let ligne of window.lignes) {
-		let match;
-		while ((match = regex.exec(ligne)) !== null) {
-			html += `<tr><td>${match[1]}</td><td>${match[2]}</td><td>${match[3]}</td></tr>`;
-		}
-	}
-	html += "</table>";
-	document.getElementById("logger1").innerHTML = html;
+    if (lignes.length === 0) {
+        alert("Veuillez charger un fichier avant d’utiliser le concordancier.");
+        return;
+    }
+
+    const motif = document.getElementById("poleID").value.trim();
+    if (!motif) {
+        alert("Veuillez entrer un motif pour le concordancier.");
+        return;
+    }
+
+    const regex = new RegExp(`(.{0,30})(${motif})(.{0,30})`, "gi");
+    let resultat = `<h4>Concordancier</h4>
+        <table border="1" style="border-collapse:collapse;">
+        <thead>
+            <tr><th>Contexte gauche</th><th>Pôle</th><th>Contexte droit</th></tr>
+        </thead>
+        <tbody>`;
+
+    let matchFound = false;
+
+    lignes.forEach(line => {
+        let match;
+        while ((match = regex.exec(line)) !== null) {
+            matchFound = true;
+            const gauche = match[1].replace(/\s+/g, " ").trimStart();
+            const centre = match[2];
+            const droite = match[3].replace(/\s+/g, " ").trimEnd();
+
+            resultat += `<tr>
+                <td style="text-align:right; padding-right:10px;">${gauche}</td>
+                <td style="text-align:center; font-weight:bold; color:red;">${centre}</td>
+                <td style="text-align:left; padding-left:10px;">${droite}</td>
+            </tr>`;
+        }
+    });
+
+    resultat += "</tbody></table>";
+
+    if (!matchFound) {
+        document.getElementById("page-analysis").innerHTML = "<p>Aucun contexte trouvé pour ce motif.</p>";
+    } else {
+        document.getElementById("page-analysis").innerHTML = resultat;
+    }
 }
+
 
 // Fonction spéciale entre grep et concordancier -------------------------------------------------
 function special() {
