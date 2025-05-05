@@ -75,53 +75,57 @@ function loadFile(event) {
 	reader.readAsText(event.target.files[0]);
 }
 
-// Segmentation du texte
+// segmentation
 function segText() {
-	const fileDisplayArea = document.getElementById('fileDisplayArea');
-	const inputDelim = document.getElementById("delimID").value;
+    // Récupérer le texte du fichier affiché
+    const text = document.getElementById("fileDisplayArea").textContent;
 
-	if (!window.fullText) {
-		fileDisplayArea.innerHTML = "<p style='color:red;'>Veuillez d'abord charger un fichier texte.</p>";
-		return;
-	}
+    if (!text) {
+        alert("Veuillez d'abord charger un fichier.");
+        return;
+    }
 
-	const escapedDelim = inputDelim.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&');
-	const regexDelim = new RegExp(`[\\s${escapedDelim}]+`, 'g');
+    // Récupérer les délimiteurs depuis le champ
+    const delim = document.getElementById("delimID").value;
+    const regex = new RegExp("[" + delim + "\\s]+", "g"); // ajoute les espaces aussi
 
-	tokens = window.fullText.split(regexDelim).filter(token => token.length > 0);
-	lignes = window.fullText.split(/\r?\n/).filter(line => line.trim() !== "");
+    // Découpage du texte selon les délimiteurs
+    tokens = text.split(regex).filter(token => token.trim() !== "");
 
-	fileDisplayArea.innerHTML = `
-		<p><b>Nombre de tokens :</b> ${tokens.length}</p>
-		<p><b>Nombre de lignes non vides :</b> ${lignes.length}</p>
-		<p><b>Extrait des tokens :</b> ${tokens.slice(0, 20).join(", ")}...</p>
-	`;
+    // Affiche un message de succès avec le nombre de tokens
+    const output = `<p style="color:green">Texte segmenté avec succès ! Nombre de tokens : <b>${tokens.length}</b>.</p>`;
+    document.getElementById("page-analysis").innerHTML = output;
 }
 
-// Dictionnaire des formes
+
 function dictionnaire() {
-	if (tokens.length === 0) {
-		alert("Veuillez segmenter le texte avant de créer le dictionnaire.");
-		return;
-	}
+    if (tokens.length === 0) {
+        alert("Veuillez segmenter le texte avant de créer le dictionnaire.");
+        return;
+    }
 
-	const freqMap = {};
-	tokens.forEach(token => {
-		const lower = token.toLowerCase();
-		freqMap[lower] = (freqMap[lower] || 0) + 1;
-	});
+    // Création du dictionnaire (objet avec fréquence)
+    const freqMap = {};
+    tokens.forEach(token => {
+        const lower = token.toLowerCase(); // insensible à la casse
+        freqMap[lower] = (freqMap[lower] || 0) + 1;
+    });
 
-	const sorted = Object.entries(freqMap).sort((a, b) => b[1] - a[1]);
+    // Transformer en tableau pour le tri
+    const sorted = Object.entries(freqMap).sort((a, b) => b[1] - a[1]);
 
-	let html = `<h4>Dictionnaire des formes (${sorted.length} formes différentes)</h4>`;
-	html += `<table border="1"><tr><th>Forme</th><th>Occurrences</th></tr>`;
-	sorted.forEach(([forme, count]) => {
-		html += `<tr><td>${forme}</td><td>${count}</td></tr>`;
-	});
-	html += `</table>`;
+    // Construire le tableau HTML
+    let html = `<h4>Dictionnaire des formes (${sorted.length} formes différentes)</h4>`;
+    html += `<table border="1"><tr><th>Forme</th><th>Occurrences</th></tr>`;
+    sorted.forEach(([forme, count]) => {
+        html += `<tr><td>${forme}</td><td>${count}</td></tr>`;
+    });
+    html += `</table>`;
 
-	document.getElementById("page-analysis").innerHTML = html;
+    // Affichage dans la zone d'analyse
+    document.getElementById("page-analysis").innerHTML = html;
 }
+
 
 // Grep
 function grep() {
