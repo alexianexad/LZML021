@@ -1,42 +1,48 @@
 html { /* pour cette partie, commentez et personnalisez au moins 12lignes. exemple ligne2 : font-size: 16px; font-size signifie "taille des caractères". px signifie .. et diffère de rem pour x raisons. */
+html {
+	/* Définit la taille du texte par défaut à 14 pixels */
 	font-size: 14px;
+	/* Prend toute la largeur de l’écran */
 	width: 100vw;
+	/* Utilise une police à chasse fixe */
 	font-family: "Lucida Console", "Courier New", monospace;
-	background-color:#301934;
+	/* Couleur de fond de la page : bleu clair */
+	background-color: #add8e6;
 }
 
 h1 {
+	/* Très grand titre principal */
 	font-size: 4.5rem;
 }
 
 h2 {
+	/* Taille pour les sous-titres */
 	font-size: 2rem;
 }
 
 h1, h2 {
+	/* Couleur du texte en blanc cassé + effet lumineux violet */
 	color: #fdfdfe;
-	text-shadow: 0px 0px 5px #b393d3, 0px 0px 10px #b393d3, 0px 0px 10px #b393d3, 0px 0px 20px #b393d3;
+	text-shadow: 0px 0px 5px #b393d3, 0px 0px 10px #b393d3;
 }
 
 h3 {
-  font-size: 4rem;
-  font-weight: 600;
-  font-family: 'Niconne', cursive;
-  color: #e0d6e9;
-  text-shadow:	2px 2px 0px  #957dad,
-  						4px 4px 0px #ee4b2b,
-               			6px 6px 0px #00c2cb,
-               			8px 8px 0px #ff7f50,
-               			10px 10px 0px #553c9a;
+	/* Style décoratif pour un titre original */
+	font-size: 4rem;
+	font-weight: 600;
+	font-family: 'Niconne', cursive;
+	color: #e0d6e9;
+	text-shadow: 2px 2px 0px #957dad, 4px 4px 0px #ee4b2b,
+		6px 6px 0px #00c2cb, 8px 8px 0px #ff7f50, 10px 10px 0px #553c9a;
 }
 
-
-
 .entete {
+	/* Centre le contenu dans le bloc .entete */
 	text-align: center;
 }
 
 #aboutme {
+	/* Bloc avec marge, fond, bordure noire et padding */
 	margin: 15px;
 	border-color: DarkSlateGrey;
 	background-color: rgb(206 206 156);
@@ -46,34 +52,40 @@ h3 {
 }
 
 footer {
-    text-align: center;
+	/* Centre le contenu du pied de page */
+	text-align: center;
 }
 
 table, th, td {
-  border: 1px solid;
+	/* Bordure pour tableaux et cellules */
+	border: 1px solid;
 }
 
 td, th {
+	/* Espacement interne dans les cellules */
 	padding: 1px 8px;
 }
 
 #logo {
+	/* Aligne le logo à gauche */
 	text-align: left;
 }
 
-.fade { /* commenter et personnaliser */
+.fade {
+	/* Bloc avec fond kaki et transition au survol */
 	background-color: DarkKhaki;
 	color: Black;
 	transition: background-color 1s;
 	font-family: "Lucida Console", "Courier New", monospace;
 }
 
-.fade:hover { /* commenter et personnaliser*/
+.fade:hover {
+	/* Couleur de fond qui change au survol */
 	background-color: rgb(198 213 74);
 }
 
-/* pour chacun des élements suivants, indiquez quelle partie de la page web est définie par ces propriétés de style. Ensuite, modifiez-les à votre goût  */
 .mylabel {
+	/* Style personnalisé pour les étiquettes */
 	background-color: #a070a1;
 	font-family: arial,helvetica,sans-serif;
 	font-variant: small-caps;
@@ -85,18 +97,20 @@ td, th {
 }
 
 #container {
+	/* Zone principale avec fond jaune, bordure et largeur définie */
 	background-color: #beb000;
 	border: 3px solid black;
 	padding: 2px;
 	padding-bottom: 5%;
 	width: 80%;
-	margin-left:10%;
+	margin-left: 10%;
 	height: 100%;
 	min-height: 100%;
 	position: relative;
 }
 
 #page-wrapper {
+	/* Conteneur centré avec ombre et fond rose pâle */
 	width: 600px;
 	background: #c19898;
 	padding: 1em;
@@ -105,118 +119,120 @@ td, th {
 }
 
 #Global {
+	/* Conteneur général avec affichage en table */
 	margin-right: auto;
 	margin-left: auto;
 	width: 80%;
 	border: 3px;
-	display:table;
-}
-#Global #fileDisplayArea {
-	float:left;
-	width:48%;
-	font-size:0.6em;
-	height:200px;
-	overflow:scroll;
+	display: table;
 }
 
+#Global #fileDisplayArea {
+	/* Zone d’affichage du texte brut (à gauche) */
+	float: left;
+	width: 48%;
+	font-size: 0.6em;
+	height: 200px;
+	overflow: scroll;
+}
 
 #Global #page-analysis {
-	margin-left:52%;
-	background: #beb000;
-	height:200px;
-	overflow:scroll;
+	/* Zone d’analyse (à droite) avec fond violet pastel */
+	margin-left: 52%;
+	background: #e6ccff;
+	height: 200px;
+	overflow: scroll;
 }
 
 #chartContainer {
+	/* Espace autour du graphique */
 	padding-top: 5%;
 }
 
-#logger3{
-	color:red;
+#logger3 {
+	/* Messages d'erreur en rouge */
+	color: red;
 }
 
-
-
-/* indiquez ce qui est défini par les propriétés suivantes (special)et modifiez-les à votre goût */
-
-.special{
-  position: relative;
-  padding: 0.9em 0.9em;
-  border: none;
-  background-color:transparent;
-  cursor: pointer;
-  outline: none;
-  font-size: 12px;
-  margin: 2em 0.4em;
-  font-family: "Lucida Console", "Courier New", monospace;
+.special {
+	/* Bouton stylisé pour les effets spéciaux */
+	position: relative;
+	padding: 0.9em;
+	border: none;
+	background-color: transparent;
+	cursor: pointer;
+	outline: none;
+	font-size: 12px;
+	margin: 2em 0.4em;
+	font-family: "Lucida Console", "Courier New", monospace;
 }
 
 .special::after,
-.special::before{
+.special::before {
+	/* Bordures animées sur les côtés du bouton */
 	content: '';
 	position: absolute;
-	display:block;
+	display: block;
 	width: 60%;
 	height: 40%;
 	border: 5px solid;
-   	transition: all 0.5s ease;
-   	border-radius: 6px;
+	transition: all 0.5s ease;
+	border-radius: 6px;
 }
-.special::after{
-      bottom: 0;
-      right: 0;
-      border-top-color: transparent;
-      border-left-color: transparent;
-      border-bottom-color: #0f4137;
-      border-right-color: #0f4137;
-     }
-     
-.special::before{
-      top: 0;
-      left: 0;
-      border-bottom-color: transparent;
-      border-right-color: transparent;
-      border-top-color: #12776f;
-      border-left-color: #12776f;
+
+.special::after {
+	bottom: 0;
+	right: 0;
+	border-top-color: transparent;
+	border-left-color: transparent;
+	border-bottom-color: #0f4137;
+	border-right-color: #0f4137;
+}
+
+.special::before {
+	top: 0;
+	left: 0;
+	border-bottom-color: transparent;
+	border-right-color: transparent;
+	border-top-color: #12776f;
+	border-left-color: #12776f;
 }
 
 .special:hover:after,
-.special:hover:before{
-      width: 100%;
-      height: 100%;
+.special:hover:before {
+	/* Animation au survol : la bordure encadre le bouton */
+	width: 100%;
+	height: 100%;
 }
 
-
-/* indiquez ce qui est défini par les propriétés suivantes (special)et modifiez-les à votre goût */
-
 .rainbowBtn {
+	/* Bouton arc-en-ciel animé */
 	display: block;
-	margin : auto;
-	 width: 200px;
-	 height: 60px;
-	 text-align: center;
-	 line-height: 60px;
-	 color: #fff;
-	 font-size: 15px;
-	 text-decoration: none;
-	 font-family: "Lucida Console", "Courier New", monospace;
-	 box-sizing: border-box;
-	 background: linear-gradient(90deg, #03a9f4, #f441a4, #ffeb3b, #03a9f4);
-	 background-size: 400%;
-	 border-radius: 30px;
-	 z-index: 1;
+	margin: auto;
+	width: 200px;
+	height: 60px;
+	text-align: center;
+	line-height: 60px;
+	color: #fff;
+	font-size: 15px;
+	text-decoration: none;
+	font-family: "Lucida Console", "Courier New", monospace;
+	box-sizing: border-box;
+	background: linear-gradient(90deg, #03a9f4, #f441a4, #ffeb3b, #03a9f4);
+	background-size: 400%;
+	border-radius: 30px;
+	z-index: 1;
 }
 
 .rainbowBtn:hover {
- animation: animate 8s linear infinite;
+	/* Lance l'animation de fond au survol */
+	animation: animate 8s linear infinite;
 }
+
 @keyframes animate {
- 0% {
-  background-position: 0%;
- }
- 100% {
-  background-position: 400%;
- }
+	/* Défilement infini du fond */
+	0% { background-position: 0%; }
+	100% { background-position: 400%; }
 }
 
 
