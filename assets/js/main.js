@@ -208,6 +208,32 @@ function grep() {
     }
 }
 
+function remplacerVoyelles() {
+    const fileDisplayArea = document.getElementById('fileDisplayArea');
+
+    // Vérifie si un texte est bien chargé
+    if (!window.fullText) {
+        fileDisplayArea.innerHTML = "<p style='color:red;'>Veuillez d'abord charger un fichier texte.</p>";
+        return;
+    }
+
+    // Expression régulière pour toutes les voyelles 
+    const voyellesRegex = /[aeiouyAEIOUY]/g;
+
+    // Utilisation de match pour compter toutes les voyelles
+    const voyellesTrouvees = window.fullText.match(voyellesRegex);
+    const nbVoyelles = voyellesTrouvees ? voyellesTrouvees.length : 0;
+
+    // Création d’un texte avec les voyelles remplacées par "/"
+    const texteModifie = window.fullText.replace(voyellesRegex, "/");
+
+    // Affichage des résultats
+    fileDisplayArea.innerHTML = `
+        <p><b>Nombre de voyelles dans le texte :</b> ${nbVoyelles}</p>
+        <p><b>Texte avec voyelles remplacées par / :</b></p>
+        <div style="white-space: pre-wrap; border:1px solid #ccc; padding:10px; margin-top:5px;">${texteModifie}</div>
+    `;
+}
 
 function concord() {
     if (lignes.length === 0) {
