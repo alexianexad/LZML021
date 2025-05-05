@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8"> <!-- encodage des caractères -->
+    <meta name="viewport" content="width=device-width, initial-scale=1"> <!-- adaptation mobile -->
+    <link rel="stylesheet" href="assets/css/style.css"> <!-- lien CSS -->
+    <link rel="icon" href="assets/img/logo-sorbonne-nouvelle.jpg" type="image/icon type"> <!-- icône onglet -->
+    <script src="assets/js/canvasjs.min.js"></script> <!-- bibliothèque pour les graphiques -->
+    <script src="assets/js/main.js"></script> <!-- script principal -->
     <title>Alexiane A</title>
-    <link rel="stylesheet" href="assets/css/style.css">
-    <link rel="icon" href="assets/img/logo-sorbonne-nouvelle.jpg" type="image/icon type">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- ajout Chart.js -->
-    <script src="assets/js/canvasjs.min.js"></script>
-    <script src="assets/js/main.js" defer></script> <!-- defer pour charger après le DOM -->
 </head>
 <body>
     <div id="page">
 
+        <!-- En-tête avec logo, titre, sous-titre et photo -->
         <header class="entete">
             <div id="logo">
                 <img src="assets/img/logo-sorbonne-nouvelle.jpg" alt="logoSBN" width="20%" height="220%">
@@ -22,15 +22,20 @@
             <img src="assets/img/language-des-fleurs-8.webp" alt="photo_profil" width="10%" height="10%">
         </header>
 
+        <!-- Bouton pour afficher/cacher la section "À propos de moi" -->
         <div style="text-align:center;">
             <button id="button_aboutme" class="fade" onclick="showHide_aboutme()">À propos de moi</button>
         </div>
 
+        <!-- Contenu masqué : CV, lectures, date/heure -->
         <section id="aboutme" style="display:none;">
+
             <div id="cv">
                 <b>Année universitaire :</b>
                 <table>
-                    <thead><tr><th>Années</th><th>Parcours</th></tr></thead>
+                    <thead>
+                        <tr><th>Années</th><th>Parcours</th></tr>
+                    </thead>
                     <tbody>
                         <tr><td>2024-2025</td><td>3ème année universitaire</td></tr>
                         <tr><td>2023-2024</td><td>2ème année universitaire</td></tr>
@@ -57,6 +62,7 @@
             </div>
         </section>
 
+        <!-- Section principale d’analyse -->
         <section id="container">
             <h3 style="text-align:center;">Analyse des données dans un fichier</h3>
 
@@ -80,32 +86,35 @@
                     </ul>
                 </div>
 
+                <!-- Chargement du fichier -->
                 <div style="text-align:center;">
                     <label for="fileInput" class="btn"><small>Sélectionner un fichier au format .txt :</small></label>
                     <input id="fileInput" type="file" accept="text/plain" name="Fichier (.txt)" onchange="handleFileSelect(event)" />
                 </div>
 
+                <!-- Options et paramètres -->
                 <div style="text-align:center;">
                     <small>
                         <label for="delimID" class="mylabel">Délimiteur(s)</label>
-                        <input type="text" value=" ,;’'~|&#@=`%*$()[]{}_:+«»§\/" id="delimID" size="40" />
+                        <input type="text" value=" ,;’'~|&#@=`%*$()[]{}_:+«»§\/" name="delim" id="delimID" size="40" />
                     </small>
                     <br>
                     <small>
                         <label for="poleID" class="mylabel">Pôle</label>
-                        <input type="text" placeholder="entrez un pôle..." id="poleID" size="20" />
+                        <input type="text" placeholder="entrez un pôle..." name="pole" id="poleID" size="20" />
                     </small>
                     &nbsp;
                     <small>
                         <label for="lgID" class="mylabel">Longueur</label>
-                        <input type="text" value="10" id="lgID" size="10" />
+                        <input type="text" value="10" name="lg" id="lgID" size="10" />
                     </small>
                     <br>
                     <small>
                         <label for="stopwordID" class="mylabel">Mots grammaticaux (stopwords)</label>
-                        <input type="text" value="de,le,la,les,à,et,des,un,une,du,que,en,l,que,qu,d,s,se,ne,n,ce,me,sa" id="stopwordID" size="60" />
+                        <input type="text" value="de,le,la,les,à,et,des,un,une,du,que,en,l,que,qu,d,s,se,ne,n,ce,me,sa" name="stopwords" id="stopwordID" size="60" />
                     </small>
 
+                    <!-- Boutons de fonctions -->
                     <br><br>
                     <button class="special" onclick="alert('Voici un site qui permet d\'analyser des textes.');"><span>Bonjour</span></button>
                     <br><br>
@@ -121,6 +130,7 @@
                 </div>
             </div>
 
+            <!-- Affichage des résultats -->
             <div style="text-align:center;">
                 <div id="logger1" style="width:100%"></div>
                 <div id="logger2" style="width:100%"></div>
@@ -130,11 +140,11 @@
             <div id="Global">
                 <div id="fileDisplayArea"></div>
                 <div id="page-analysis"></div>
-                <!-- Ajout du canvas pour le graphique -->
-                <canvas id="graph" width="400" height="400"></canvas>
+                <div id="chartContainer" style="height: 300px; width: 100%;"></div>
             </div>
         </section>
 
+        <!-- Pied de page -->
         <footer style="text-align:center;">
             <br><br>
             <a href="http://www.univ-paris3.fr/" class="rainbowBtn">Université Paris 3</a>
