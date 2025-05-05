@@ -1,3 +1,6 @@
+let tokens = []; // contiendra les tokens du document
+let lignes = []; // stocker les lignes du texte
+
 // Afficher date et heure -----------------------------------------------------------------------
 function date_heure() { 
 	let now = new Date();
@@ -74,60 +77,120 @@ function loadFile(event) {
 	reader.readAsText(event.target.files[0]);
 }
 
-// Segmenter le texte en lignes et tokens ---------------------------------------------------------
-function segmente() {
-	let texte = document.getElementById("holder1").innerText;
-	window.tokens = texte.match(/\b\w+\b/g) || [];
-	window.lignes = texte.split(/\n+/).filter(ligne => ligne.trim() !== "");
+function segText() {
+    // Récupérer le texte du fichier affiché
+    const text = document.getElementById("fileDisplayArea").textContent;
+
+    if (!text) {
+        alert("Veuillez d'abord charger un fichier.");
+        return;
+    }
+
+    // Récupérer les délimiteurs qu'on a
+    const delim = document.getElementById("delimID").value;
+    const regex = new RegExp("[" + delim + "\\s]+", "g"); // ajoute des espaces aussi
+
+    // Découpage du texte selon les délimiteurs
+    tokens = text.split(regex).filter(token => token.trim() !== "");
+
+    // Affiche un message de succès avec le nombre de tokens
+    const output = `<p style="color:green">Texte segmenté avec succès ! Nombre de tokens : <b>${tokens.length}</b>.</p>`;
+    document.getElementById("page-analysis").innerHTML = output;
 }
 
-// Afficher des statistiques ---------------------------------------------------------------------
-function stats() {
-	if (!window.tokens || !window.lignes) {
-		document.getElementById("logger1").innerHTML = "Erreur : fichier non chargé.";
-		return;
-	}
-	let nbTokens = window.tokens.length;
-	let nbLignes = window.lignes.length;
-	document.getElementById("logger1").innerHTML = "Nombre de mots : " + nbTokens + " | Lignes non vides : " + nbLignes;
-}
-
-// Dictionnaire des formes par fréquence ---------------------------------------------------------
+// Dictionnaire des formes par fréquence 
 function dictionnaire() {
-	if (!window.tokens) {
-		document.getElementById("logger1").innerHTML = "Erreur : aucun fichier chargé.";
-		return;
-	}
-	let freq = {};
-	for (let mot of window.tokens) {
-		mot = mot.toLowerCase();
-		freq[mot] = (freq[mot] || 0) + 1;
-	}
-	let sorted = Object.entries(freq).sort((a, b) => b[1] - a[1]);
-	let html = "<table><tr><th>Mot</th><th>Fréquence</th></tr>";
-	for (let [mot, count] of sorted) {
-		html += `<tr><td>${mot}</td><td>${count}</td></tr>`;
-	}
-	html += "</table>";
-	document.getElementById("logger1").innerHTML = html;
+    if (tokens.length === 0) {
+        alert("Veuillez segmenter le texte avant de créer le dictionnaire.");
+        return;
+    }
+
+    // Création du dictionnaire (objet avec fréquence)
+    const freqMap = {};
+    tokens.forEach(token => {
+        const lower = token.toLowerCase(); // insensible à la casse
+        freqMap[lower] = (freqMap[lower] || 0) + 1;
+    });
+
+    // Transformer en tableau pour le tri
+    const sorted = Object.entries(freqMap).sort((a, b) => b[1] - a[1]);
+
+    // Construire le tableau HTML
+    let html = `<h4>Dictionnaire des formes (${sorted.length} formes différentes)</h4>`;
+    html += `<table border="1"><tr><th>Forme</th><th>Occurrences</th></tr>`;
+    sorted.forEach(([forme, count]) => {
+        html += `<tr><td>${forme}</td><td>${count}</td></tr>`;
+    });
+    html += `</table>`;
+
+    // Affichage dans la zone d'analyse
+    document.getElementById("page-analysis").innerHTML = html;
+}
+function handleFileSelect(evt) {
+    const file = evt.target.files[0];
+
+    if (!file) {
+        alert("Aucun fichier sélectionné.");
+        return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        const contents = e.target.result;
+        document.getElementById("fileDisplayArea").textContent = contents;
+
+        // Segmentation automatique en lignes
+        lignes = contents.split(/\r?\n/); // coupe par sauts de ligne
+        const nonEmptyLines = lignes.filter(line => line.trim() !== "");
+
+        // Réinitialise les tokens (nécessite une segmentation manuelle)
+        tokens = [];
+
+        // Affiche un message avec le nombre de lignes
+        document.getElementById("page-analysis").innerHTML =
+            `<p style="color:green">Fichier chargé avec succès !<br>
+             Nombre de lignes : <b>${lignes.length}</b><br>
+             Lignes non vides : <b>${nonEmptyLines.length}</b></p>`;
+    };
+    reader.readAsText(file);
 }
 
-// Recherche GREP avec surlignage ---------------------------------------------------------------
+
 function grep() {
-	if (!window.lignes) {
-		document.getElementById("logger1").innerHTML = "Erreur : aucun fichier chargé.";
-		return;
-	}
-	let motif = prompt("Motif à chercher ?");
-	if (!motif) {
-		document.getElementById("logger1").innerHTML = "Erreur : aucun motif fourni.";
-		return;
-	}
-	let regex = new RegExp(motif, "gi");
-	let resultats = window.lignes.filter(ligne => regex.test(ligne));
-	let html = resultats.map(l => l.replace(regex, match => `<span style='color:red'>${match}</span>`)).join("<br>");
-	document.getElementById("logger1").innerHTML = html || "Aucun résultat trouvé.";
+    if (lignes.length === 0) {
+        alert("Veuillez charger un fichier avant d’utiliser grep.");
+        return;
+    }
+
+    const motif = document.getElementById("poleID").value.trim();
+    if (!motif) {
+        alert("Veuillez entrer un motif (expression régulière).");
+        return;
+    }
+
+    const regex = new RegExp(motif, "gi"); // expression insensible à la casse
+    let resultat = "<h4>Résultats du grep</h4><ul>";
+
+    let matchFound = false;
+
+    lignes.forEach(line => {
+        if (regex.test(line)) {
+            matchFound = true;
+            // Remettre le pointeur à 0 pour replace()
+            const surligne = line.replace(regex, match => `<span style="color:red; font-weight:bold;">${match}</span>`);
+            resultat += `<li>${surligne}</li>`;
+        }
+    });
+
+    resultat += "</ul>";
+
+    if (!matchFound) {
+        document.getElementById("page-analysis").innerHTML = "<p>Aucun résultat trouvé.</p>";
+    } else {
+        document.getElementById("page-analysis").innerHTML = resultat;
+    }
 }
+
 
 // Concordancier (contexte gauche/pôle/droit) ---------------------------------------------------
 function concord() {
