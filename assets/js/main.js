@@ -43,6 +43,18 @@ function showHide_aide() {
     }
 }
 
+// Fonction qui affiche la date et rend visible le bouton heure
+function afficherDateHeure() {
+    const now = new Date(); // Crée un objet Date avec l’heure actuelle
+    const date = now.toLocaleDateString("fr-FR"); // Format date français
+    document.getElementById("outputDateHeure").textContent = "Date : " + date;
+
+    // Affiche le bouton heure et masque celui de la date
+    document.getElementById("btn1").style.display = "none";
+    document.getElementById("btn2").style.display = "inline";
+}
+
+
 // Charger un fichier texte -----------------------------------------------------------------------
 function loadFile(event) {
 	let reader = new FileReader();
