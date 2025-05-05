@@ -126,73 +126,114 @@ function dictionnaire() {
     document.getElementById("page-analysis").innerHTML = html;
 }
 
+function handleFileSelect(evt) {
+    const file = evt.target.files[0];
 
-// Grep
-function grep() {
-	if (lignes.length === 0) {
-		alert("Veuillez charger un fichier avant d’utiliser grep.");
-		return;
-	}
+    if (!file) {
+        alert("Aucun fichier sélectionné.");
+        return;
+    }
 
-	const motif = document.getElementById("poleID").value.trim();
-	if (!motif) {
-		alert("Veuillez entrer un motif.");
-		return;
-	}
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        const contents = e.target.result;
+        document.getElementById("fileDisplayArea").textContent = contents;
 
-	const regex = new RegExp(motif, "gi");
-	let resultat = "<h4>Résultats du grep</h4><ul>";
-	let matchFound = false;
+        // Segmentation automatique en lignes
+        lignes = contents.split(/\r?\n/); // coupe par sauts de ligne
+        const nonEmptyLines = lignes.filter(line => line.trim() !== "");
 
-	lignes.forEach(line => {
-		if (regex.test(line)) {
-			matchFound = true;
-			const surligne = line.replace(regex, match => `<span style="color:red; font-weight:bold;">${match}</span>`);
-			resultat += `<li>${surligne}</li>`;
-		}
-	});
+        // Réinitialise les tokens (nécessite une segmentation manuelle)
+        tokens = [];
 
-	resultat += "</ul>";
-
-	document.getElementById("page-analysis").innerHTML = matchFound ? resultat : "<p>Aucun résultat trouvé.</p>";
+        // Affiche un message avec le nombre de lignes
+        document.getElementById("page-analysis").innerHTML =
+            `<p style="color:green">Fichier chargé avec succès !<br>
+             Nombre de lignes : <b>${lignes.length}</b><br>
+             Lignes non vides : <b>${nonEmptyLines.length}</b></p>`;
+    };
+    reader.readAsText(file);
 }
 
-// Concordancier
+function grep() {
+    if (lignes.length === 0) {
+        alert("Veuillez charger un fichier avant d’utiliser grep.");
+        return;
+    }
+
+    const motif = document.getElementById("poleID").value.trim();
+    if (!motif) {
+        alert("Veuillez entrer un motif (expression régulière).");
+        return;
+    }
+
+    const regex = new RegExp(motif, "gi"); // expression insensible à la casse
+    let resultat = "<h4>Résultats du grep</h4><ul>";
+
+    let matchFound = false;
+
+    lignes.forEach(line => {
+        if (regex.test(line)) {
+            matchFound = true;
+            // Remettre le pointeur à 0 pour replace()
+            const surligne = line.replace(regex, match => `<span style="color:red; font-weight:bold;">${match}</span>`);
+            resultat += `<li>${surligne}</li>`;
+        }
+    });
+
+    resultat += "</ul>";
+
+    if (!matchFound) {
+        document.getElementById("page-analysis").innerHTML = "<p>Aucun résultat trouvé.</p>";
+    } else {
+        document.getElementById("page-analysis").innerHTML = resultat;
+    }
+}
+
+//concordentier
 function concord() {
-	if (lignes.length === 0) {
-		alert("Veuillez charger un fichier avant d’utiliser le concordancier.");
-		return;
-	}
+    if (lignes.length === 0) {
+        alert("Veuillez charger un fichier avant d’utiliser le concordancier.");
+        return;
+    }
 
-	const motif = document.getElementById("poleID").value.trim();
-	if (!motif) {
-		alert("Veuillez entrer un motif pour le concordancier.");
-		return;
-	}
+    const motif = document.getElementById("poleID").value.trim();
+    if (!motif) {
+        alert("Veuillez entrer un motif pour le concordancier.");
+        return;
+    }
 
-	const regex = new RegExp(`(.{0,30})(${motif})(.{0,30})`, "gi");
-	let resultat = `<h4>Concordancier</h4>
-		<table border="1" style="border-collapse:collapse;">
-		<thead><tr><th>Contexte gauche</th><th>Pôle</th><th>Contexte droit</th></tr></thead><tbody>`;
+    const regex = new RegExp(`(.{0,30})(${motif})(.{0,30})`, "gi");
+    let resultat = `<h4>Concordancier</h4>
+        <table border="1" style="border-collapse:collapse;">
+        <thead>
+            <tr><th>Contexte gauche</th><th>Pôle</th><th>Contexte droit</th></tr>
+        </thead>
+        <tbody>`;
 
-	let matchFound = false;
+    let matchFound = false;
 
-	lignes.forEach(line => {
-		let match;
-		while ((match = regex.exec(line)) !== null) {
-			matchFound = true;
-			const gauche = match[1].replace(/\s+/g, " ").trimStart();
-			const centre = match[2];
-			const droite = match[3].replace(/\s+/g, " ").trimEnd();
+    lignes.forEach(line => {
+        let match;
+        while ((match = regex.exec(line)) !== null) {
+            matchFound = true;
+            const gauche = match[1].replace(/\s+/g, " ").trimStart();
+            const centre = match[2];
+            const droite = match[3].replace(/\s+/g, " ").trimEnd();
 
-			resultat += `<tr>
-				<td style="text-align:right; padding-right:10px;">${gauche}</td>
-				<td style="text-align:center; font-weight:bold; color:red;">${centre}</td>
-				<td style="text-align:left; padding-left:10px;">${droite}</td>
-			</tr>`;
-		}
-	});
+            resultat += `<tr>
+                <td style="text-align:right; padding-right:10px;">${gauche}</td>
+                <td style="text-align:center; font-weight:bold; color:red;">${centre}</td>
+                <td style="text-align:left; padding-left:10px;">${droite}</td>
+            </tr>`;
+        }
+    });
 
-	resultat += "</tbody></table>";
-	document.getElementById("page-analysis").innerHTML = matchFound ? resultat : "<p>Aucun contexte trouvé pour ce motif.</p>";
+    resultat += "</tbody></table>";
+
+    if (!matchFound) {
+        document.getElementById("page-analysis").innerHTML = "<p>Aucun contexte trouvé pour ce motif.</p>";
+    } else {
+        document.getElementById("page-analysis").innerHTML = resultat;
+    }
 }
