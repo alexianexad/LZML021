@@ -1,166 +1,174 @@
-// Fonction pour afficher la date et l'heure
-function afficherDateHeure() {
-  const maintenant = new Date(); // On crée un objet Date pour avoir la date et l'heure actuelles
-  const dateHeure = maintenant.toLocaleString(); // Format lisible
-  document.getElementById("resultat").innerHTML = dateHeure; // On affiche dans la div résultat
+let originalText = ""; // contient le texte d’origine chargé
+let tokens = []; // liste des tokens
+let lignes = []; // lignes du texte
+let lignes_non_vides = []; // lignes sans espace vide
+
+// Affiche ou cache la section "about me"
+function showHide_aboutme() {
+  const aboutme = document.getElementById("aboutme");
+  const btn = document.getElementById("button_aboutme");
+  if (aboutme.style.display === "none" || aboutme.style.display === "") {
+    aboutme.style.display = "block"; // si c'est caché, on affiche
+    btn.innerText = "Cacher"; // texte du bouton
+  } else {
+    aboutme.style.display = "none"; // sinon on cache
+    btn.innerText = "Afficher"; // texte du bouton
+  }
 }
 
-// Fonction pour mettre en majuscules le texte
-function mettreEnMajuscules() {
-  const texte = document.getElementById("texte").value;
-  const texteMajuscules = texte.toUpperCase(); // Convertit en majuscules
-  document.getElementById("texte").value = texteMajuscules;
+// Affiche ou cache le mode d'emploi
+function showHide_aide() {
+  const aide = document.getElementById("aide");
+  if (aide.style.display === "none" || aide.style.display === "") {
+    aide.style.display = "block"; // on affiche si c'était caché
+  } else {
+    aide.style.display = "none"; // sinon on cache
+  }
 }
 
-// Fonction pour charger un fichier texte
-function chargerFichier(event) {
-  const fichier = event.target.files[0]; // On récupère le premier fichier sélectionné
-  const lecteur = new FileReader(); // Permet de lire le fichier
-  lecteur.onload = function(e) {
-    const contenu = e.target.result;
-    document.getElementById("texte").value = contenu; // On met le contenu dans la zone de texte
+// Affiche la date et l'heure actuelles
+function datxxx() {
+  const now = new Date(); // crée un objet Date avec l'heure actuelle
+  const dateString = now.toLocaleString(); // format lisible
+  document.getElementById("btn1").style.display = "none"; // cache le bouton initial
+  document.getElementById("xxx").style.display = "block"; // affiche l'autre bouton (facultatif)
+  document.getElementById("xxx").innerText = dateString; // insère la date dans la balise <p>
+}
+
+// Fonction appelée au chargement d’un fichier texte
+document.getElementById('fileInput').addEventListener('change', function(e) {
+  const file = e.target.files[0]; // on récupère le fichier sélectionné
+  if (!file) return;
+
+  const reader = new FileReader(); // lecteur de fichier
+
+  reader.onload = function(e) {
+    const contents = e.target.result;
+    document.getElementById('fileDisplayArea').textContent = contents; // affiche le texte brut
+    originalText = contents; // sauvegarde le texte original dans une variable globale
+    tokens = originalText.split(/\s+/); // découpe le texte en mots/tokens
+    lignes = originalText.split(/\n/); // découpe le texte en lignes
+    lignes_non_vides = lignes.filter(l => l.trim().length > 0); // enlève les lignes vides
+    document.getElementById('logger1').textContent = "Nombre de tokens : " + tokens.length;
+    document.getElementById('logger2').textContent = "Nombre de lignes non vides : " + lignes_non_vides.length;
   };
-  lecteur.readAsText(fichier); // On lit le fichier comme texte
+
+  reader.readAsText(file); // lit le fichier comme texte
+});
+
+// Segmentation des tokens selon les délimiteurs choisis
+function segText() {
+  const delim = document.getElementById("delimID").value;
+  const reg = new RegExp("[" + delim + "]+"); // expression régulière pour les délimiteurs
+  tokens = originalText.split(reg).filter(t => t.length > 0); // coupe le texte, enlève les vides
+  lignes = originalText.split("\n"); // recoupe en lignes
+  lignes_non_vides = lignes.filter(l => l.trim().length > 0);
+  document.getElementById("logger1").textContent = "Nombre de tokens : " + tokens.length;
+  document.getElementById("logger2").textContent = "Nombre de lignes non vides : " + lignes_non_vides.length;
 }
 
-// Fonction pour segmenter le texte en tokens (mots) et en lignes
-function segmenterTexte() {
-  const texte = document.getElementById("texte").value;
-  const tokens = texte.match(/\b\w+\b/g) || []; // On isole les mots (tokens)
-  const lignes = texte.split("\n"); // On coupe le texte en lignes
-  const lignesNonVides = lignes.filter(ligne => ligne.trim() !== ""); // On garde seulement les lignes non vides
-  const resultat = `Nombre de tokens : ${tokens.length}<br>Nombre de lignes non vides : ${lignesNonVides.length}`;
-  document.getElementById("resultat").innerHTML = resultat;
+// Affiche un dictionnaire de formes triées par fréquence
+function dictionnaire() {
+  const dico = {};
+  for (let t of tokens) {
+    if (dico[t]) dico[t] += 1;
+    else dico[t] = 1;
+  }
+  const entries = Object.entries(dico).sort((a, b) => b[1] - a[1]); // tri décroissant
+  let html = "<table border='1'><tr><th>Forme</th><th>Fréquence</th></tr>";
+  for (let [mot, freq] of entries) {
+    html += `<tr><td>${mot}</td><td>${freq}</td></tr>`;
+  }
+  html += "</table>";
+  document.getElementById("logger3").innerHTML = html;
 }
 
-// Fonction pour créer un dictionnaire des formes par fréquence
-function dictionnaireFormes() {
-  const texte = document.getElementById("texte").value;
-  const mots = texte.toLowerCase().match(/\b\w+\b/g) || [];
-  const frequence = {};
-  mots.forEach(mot => {
-    frequence[mot] = (frequence[mot] || 0) + 1; // On compte chaque mot
-  });
-
-  // On transforme en tableau pour trier
-  const entrees = Object.entries(frequence);
-  entrees.sort((a, b) => b[1] - a[1]); // Tri décroissant par fréquence
-
-  let resultat = "<ul>";
-  entrees.forEach(([mot, freq]) => {
-    resultat += `<li>${mot} : ${freq}</li>`;
-  });
-  resultat += "</ul>";
-
-  document.getElementById("resultat").innerHTML = resultat;
-}
-
-// Fonction pour faire une recherche (type GREP)
-function rechercheGREP() {
-  const motif = document.getElementById("motif").value;
-  const texte = document.getElementById("texte").value;
-  const lignes = texte.split("\n");
-
-  const resultat = lignes
-    .filter(ligne => ligne.includes(motif))
-    .map(ligne => ligne.replaceAll(motif, `<mark>${motif}</mark>`)) // Surlignage
-    .join("<br>");
-
-  document.getElementById("resultat").innerHTML = resultat || "Aucun résultat trouvé.";
-}
-
-// Fonction pour générer un concordancier
-function genererConcordancier() {
-  const texte = document.getElementById("texte").value;
-  const mot = document.getElementById("motif").value.toLowerCase();
-  const lignes = texte.split("\n");
-  let resultat = "";
-
-  lignes.forEach(ligne => {
-    const mots = ligne.split(/\s+/);
-    mots.forEach((m, index) => {
-      if (m.toLowerCase().includes(mot)) {
-        // On construit le contexte gauche et droit
-        const contexteGauche = mots.slice(Math.max(0, index - 5), index).join(" ");
-        const contexteDroit = mots.slice(index + 1, index + 6).join(" ");
-        resultat += `${contexteGauche} <strong>${m}</strong> ${contexteDroit}<br>`;
-      }
-    });
-  });
-
-  document.getElementById("resultat").innerHTML = resultat || "Aucune occurrence trouvée.";
-}
-
-// Fonction pour remplacer toutes les voyelles par *
-function remplacerVoyelles() {
-  const texte = document.getElementById("texte").value;
-  const texteModifie = texte.replace(/[aeiouyàâäéèêëîïôöùûüÿ]/gi, "*");
-  document.getElementById("texte").value = texteModifie;
-}
-
-// Fonction pour compter le nombre de phrases
-function compterPhrases() {
-  const texte = document.getElementById("texte").value;
-  const phrases = texte.match(/[^.!?]+[.!?]/g); // On isole les phrases avec ponctuation
-  const nbPhrases = phrases ? phrases.length : 0;
-  document.getElementById("resultat").innerHTML = `Nombre de phrases : ${nbPhrases}`;
-}
-
-// Fonction pour trouver les mots les plus longs
-function motsPlusLongs() {
-  const texte = document.getElementById("texte").value;
-  const mots = texte.match(/\b\w+\b/g) || [];
-
-  mots.sort((a, b) => b.length - a.length); // Tri des mots par longueur décroissante
-  const top10 = mots.slice(0, 10); // On prend les 10 plus longs
-
-  document.getElementById("resultat").innerHTML = "<h3>Mots les plus longs :</h3><ul>" +
-    top10.map(m => `<li>${m}</li>`).join('') +
-    "</ul>";
-}
-
-// Fonction pour afficher un graphe camembert des mots fréquents
-function grapheCamembert() {
-  const texte = document.getElementById("texte").value;
-  const mots = texte.toLowerCase().match(/\b\w+\b/g) || [];
-
-  const freq = {};
-  mots.forEach(m => {
-    freq[m] = (freq[m] || 0) + 1;
-  });
-
-  const top5 = Object.entries(freq)
-    .sort((a, b) => b[1] - a[1])
-    .slice(0, 5);
-
-  const labels = top5.map(([mot]) => mot);
-  const data = top5.map(([, f]) => f);
-
-  const resultat = document.getElementById("resultat");
-  resultat.innerHTML = '<canvas id="camembert" width="400" height="400"></canvas>';
-
-  const ctx = document.getElementById("camembert").getContext("2d");
-  new Chart(ctx, {
-    type: 'pie',
-    data: {
-      labels: labels,
-      datasets: [{
-        data: data,
-        backgroundColor: ['red', 'blue', 'green', 'orange', 'purple']
-      }]
+// Fonction de recherche GREP : affiche les lignes contenant le "pôle"
+function grep() {
+  const pole = document.getElementById("poleID").value;
+  const reg = new RegExp(pole, "i"); // insensible à la casse
+  let html = "<table border='1'><tr><th>Num ligne</th><th>Contenu</th></tr>";
+  for (let i = 0; i < lignes_non_vides.length; i++) {
+    if (reg.test(lignes_non_vides[i])) {
+      html += `<tr><td>${i + 1}</td><td>${lignes_non_vides[i]}</td></tr>`;
     }
-  });
+  }
+  html += "</table>";
+  document.getElementById("logger3").innerHTML = html;
 }
 
-// FONCTION SPÉCIALE demandée (ajoutée à la fin)
-function fonctionSpeciale() {
-  const texte = document.getElementById("texte").value;
+// Fonction pour remplacer toutes les voyelles par une étoile
+function remplacerVoyelles() {
+  const modif = originalText.replace(/[aeiouyàâäéèêëîïôöùûü]/gi, "*"); // remplace toutes les voyelles
+  document.getElementById("page-analysis").innerText = modif; // affiche le résultat
+}
 
-  // Exemple : afficher uniquement les mots palindromes (ex. : "radar", "été")
-  const mots = texte.toLowerCase().match(/\b\w+\b/g) || [];
-  const palindromes = mots.filter(mot => mot === mot.split('').reverse().join(''));
-  
-  document.getElementById("resultat").innerHTML = "<h3>Palindromes trouvés :</h3><ul>" +
-    palindromes.map(m => `<li>${m}</li>`).join('') +
-    "</ul>";
+// Affiche une concordance autour du mot (ou regex) entré
+function concord() {
+  const pole = document.getElementById("poleID").value;
+  const lg = parseInt(document.getElementById("lgID").value);
+  const reg = new RegExp(pole, "i");
+  let html = "<table border='1'><tr><th>Contexte gauche</th><th>Pôle</th><th>Contexte droit</th></tr>";
+  for (let ligne of lignes_non_vides) {
+    const mots = ligne.split(/\s+/);
+    for (let i = 0; i < mots.length; i++) {
+      if (reg.test(mots[i])) {
+        const gauche = mots.slice(Math.max(0, i - lg), i).join(" ");
+        const droit = mots.slice(i + 1, i + 1 + lg).join(" ");
+        html += `<tr><td>${gauche}</td><td>${mots[i]}</td><td>${droit}</td></tr>`;
+      }
+    }
+  }
+  html += "</table>";
+  document.getElementById("logger3").innerHTML = html;
+}
+
+// Fonction qui ajoute 'uj' à chaque mot (version /kujuj/)
+function kujuj() {
+  const modif = tokens.map(t => t + "uj").join(" ");
+  document.getElementById("page-analysis").innerText = modif;
+}
+
+// Compte le nombre de phrases dans le texte (en utilisant les points)
+function nbPhrases() {
+  const phrases = originalText.split(/[.!?]+/).filter(p => p.trim().length > 0); // coupe aux fins de phrases
+  document.getElementById("logger3").innerText = "Nombre de phrases : " + phrases.length;
+}
+
+// Affiche les 10 mots les plus longs du texte
+function tokenLong() {
+  const uniques = [...new Set(tokens)];
+  const longs = uniques.sort((a, b) => b.length - a.length).slice(0, 10);
+  let html = "<ul>";
+  for (let mot of longs) {
+    html += `<li>${mot} (${mot.length} lettres)</li>`;
+  }
+  html += "</ul>";
+  document.getElementById("logger3").innerHTML = html;
+}
+
+// Création d’un graphique en camembert (Pie Chart) avec les mots les plus fréquents hors stopwords
+function pieChart() {
+  const stopwords = document.getElementById("stopwordID").value.split(",");
+  const dico = {};
+  for (let t of tokens) {
+    const tmin = t.toLowerCase();
+    if (stopwords.includes(tmin) || tmin.length < 2) continue;
+    dico[tmin] = (dico[tmin] || 0) + 1;
+  }
+  const entries = Object.entries(dico).sort((a, b) => b[1] - a[1]).slice(0, 30);
+  const dataPoints = entries.map(([label, y]) => ({ label, y }));
+
+  const chart = new CanvasJS.Chart("chartContainer", {
+    animationEnabled: true,
+    title: { text: "30 mots les plus fréquents hors stopwords" },
+    data: [{
+      type: "pie",
+      startAngle: 240,
+      yValueFormatString: "##0",
+      indexLabel: "{label} ({y})",
+      dataPoints: dataPoints
+    }]
+  });
+  chart.render();
 }
