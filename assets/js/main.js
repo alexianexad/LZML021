@@ -78,7 +78,8 @@ function loadFile(event) {
 // segmentation
 function segText() {
     // Récupérer le texte du fichier affiché
-    const text = document.getElementById("fileDisplayArea").textContent;
+    const text = document.getElementById("holder1").innerText;
+
 
     if (!text) {
         alert("Veuillez d'abord charger un fichier.");
