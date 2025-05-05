@@ -290,26 +290,42 @@ function concord() {
 
 
 
-// Compter les phrases --------------------------------------------------------------------------
-function phrases() {
-	let texte = document.getElementById("holder1").innerText;
-	let nb = (texte.match(/[.!?]+/g) || []).length;
-	document.getElementById("logger1").innerHTML = "Nombre de phrases : " + nb;
+// Compter les phrases 
+function nbPhrases() {
+    if (!window.fullText) {
+        document.getElementById('logger1').innerHTML = "<p style='color:red;'>Chargez d'abord un texte.</p>";
+        return;
+    }
+
+    // Découpage  par ponctuation finale
+    const phrases = window.fullText.split(/[.!?]+/).filter(p => p.trim().length > 0);
+    const nb = phrases.length;
+
+    document.getElementById('logger1').innerHTML = `<p><b>Nombre de phrases :</b> ${nb}</p>`;
 }
 
-// Mots les plus longs --------------------------------------------------------------------------
-function motsLongs() {
-	let sorted = [...window.tokens].sort((a, b) => b.length - a.length);
-	let top10 = sorted.slice(0, 10);
-	let html = "<ol>";
-	for (let mot of top10) {
-		html += `<li>${mot}</li>`;
-	}
-	html += "</ol>";
-	document.getElementById("logger1").innerHTML = html;
+// mot les plus long
+function tokenLong() {
+    if (!window.tokens || window.tokens.length === 0) {
+        document.getElementById('logger2').innerHTML = "<p style='color:red;'>Veuillez d'abord segmenter le texte.</p>";
+        return;
+    }
+
+    // Trie les tokens par longueur décroissante
+    const sorted = [...window.tokens].sort((a, b) => b.length - a.length);
+    const top10 = sorted.slice(0, 10);
+
+    // Création d'un tableau HTML
+    let html = "<table border='1' style='margin:auto;'><thead><tr><th>Mot</th><th>Longueur</th></tr></thead><tbody>";
+    for (let mot of top10) {
+        html += `<tr><td>${mot}</td><td>${mot.length}</td></tr>`;
+    }
+    html += "</tbody></table>";
+
+    document.getElementById('logger2').innerHTML = `<p><b>Top 10 des mots les plus longs :</b></p>${html}`;
 }
 
-// Graphe camembert avec Chart.js ---------------------------------------------------------------
+// Graphe camembert avec Chart.js ( pas réussi a faire fonctionné)
 function camembert() {
 	let freq = {};
 	for (let mot of window.tokens) {
