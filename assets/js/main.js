@@ -208,32 +208,37 @@ function grep() {
     }
 }
 
-function remplacerVoyelles() {
+function segText() {
     const fileDisplayArea = document.getElementById('fileDisplayArea');
+    const inputDelim = document.getElementById("delimID").value;
 
-    // Vérifie si un texte est bien chargé
+    // Vérifie que le texte a bien été chargé
     if (!window.fullText) {
         fileDisplayArea.innerHTML = "<p style='color:red;'>Veuillez d'abord charger un fichier texte.</p>";
         return;
     }
 
-    // Expression régulière pour toutes les voyelles 
-    const voyellesRegex = /[aeiouyAEIOUY]/g;
+    // Création dynamique de l'expression régulière à partir des délimiteurs
+    const escapedDelim = inputDelim.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&'); // échappe les caractères spéciaux
+    const regexDelim = new RegExp(`[\\s${escapedDelim}]+`, 'g'); // délimiteurs + espaces
 
-    // Utilisation de match pour compter toutes les voyelles
-    const voyellesTrouvees = window.fullText.match(voyellesRegex);
-    const nbVoyelles = voyellesTrouvees ? voyellesTrouvees.length : 0;
+    // Découpe du texte en tokens (mots)
+    const tokens = window.fullText.split(regexDelim).filter(token => token.length > 0);
 
-    // Création d’un texte avec les voyelles remplacées par "/"
-    const texteModifie = window.fullText.replace(voyellesRegex, "/");
+    // Stockage global pour réutilisation
+    window.tokens = tokens;
+    window.nbTokens = tokens.length;
 
-    // Affichage des résultats
+    // Affichage du résultat
     fileDisplayArea.innerHTML = `
-        <p><b>Nombre de voyelles dans le texte :</b> ${nbVoyelles}</p>
-        <p><b>Texte avec voyelles remplacées par / :</b></p>
-        <div style="white-space: pre-wrap; border:1px solid #ccc; padding:10px; margin-top:5px;">${texteModifie}</div>
+        <p><b>Nombre de tokens :</b> ${tokens.length}</p>
+        <p><b>Liste des tokens :</b></p>
+        <div style="white-space: pre-wrap; border:1px solid #ccc; padding:10px; max-height:200px; overflow:auto;">
+            ${tokens.join('\n')}
+        </div>
     `;
 }
+
 
 function concord() {
     if (lignes.length === 0) {
@@ -283,28 +288,7 @@ function concord() {
 }
 
 
-// Fonction spéciale entre grep et concordancier -------------------------------------------------
-function special() {
-	if (!window.lignes) {
-		document.getElementById("logger1").innerHTML = "Erreur : aucun fichier chargé.";
-		return;
-	}
-	let motif = prompt("Motif ou expression à chercher ?");
-	if (!motif) {
-		document.getElementById("logger1").innerHTML = "Erreur : aucun motif fourni.";
-		return;
-	}
-	let regex = new RegExp(`(.{0,20})(${motif})(.{0,20})`, "gi");
-	let html = "<table><tr><th>Avant</th><th>Motif</th><th>Après</th></tr>";
-	for (let ligne of window.lignes) {
-		let match;
-		while ((match = regex.exec(ligne)) !== null) {
-			html += `<tr><td>${match[1]}</td><td style='color:red'>${match[2]}</td><td>${match[3]}</td></tr>`;
-		}
-	}
-	html += "</table>";
-	document.getElementById("logger1").innerHTML = html || "Aucun résultat trouvé.";
-}
+
 
 // Compter les phrases --------------------------------------------------------------------------
 function phrases() {
