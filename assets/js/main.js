@@ -1,176 +1,104 @@
-// ============================
-// VARIABLES GLOBALES
-// ============================
-
-// On déclare deux variables globales pour stocker le texte découpé :
-let tokens = [];  // liste de tous les mots du texte
-let lignes = [];  // liste des lignes du texte (une ligne = un retour à la ligne)
-
-// ============================
-// DATE ET HEURE
-// ============================
-
-// Cette fonction affiche automatiquement la date et l'heure en haut de la page
+// Cette fonction affiche la date et l'heure actuelles dans la zone "resultat"
 function afficherDateHeure() {
-    const maintenant = new Date();  // On récupère la date et l'heure actuelles
-    const options = {
-        weekday: 'long', year: 'numeric', month: 'long',
-        day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit'
-    };
-    const dateHeure = maintenant.toLocaleDateString('fr-FR', options); // Format français
-    document.getElementById("dateHeure").textContent = "Date et heure : " + dateHeure;
+  let maintenant = new Date(); // On crée un objet Date contenant l’instant présent
+  let date = maintenant.toLocaleDateString(); // On extrait la date au format local (ex: JJ/MM/AAAA)
+  let heure = maintenant.toLocaleTimeString(); // On extrait l’heure au format local (ex: HH:MM:SS)
+  document.getElementById("resultat").innerHTML = "Date : " + date + " - Heure : " + heure;
 }
 
-// Met à jour la date/heure toutes les secondes
-setInterval(afficherDateHeure, 1000);
-afficherDateHeure(); // Appel initial
-
-// ============================
-// CHARGEMENT DU FICHIER TEXTE
-// ============================
-
-// Quand un fichier est sélectionné
-document.getElementById("fileInput").addEventListener("change", function (event) {
-    const fichier = event.target.files[0]; // On récupère le fichier choisi
-    if (!fichier) return;
-
-    const reader = new FileReader(); // Permet de lire le fichier texte
-
-    // Quand le fichier est lu :
-    reader.onload = function (e) {
-        const texte = e.target.result; // Le contenu du fichier
-
-        // On affiche le texte dans la zone prévue
-        document.getElementById("textArea").value = texte;
-
-        // ============================
-        // SEGMENTATION AUTOMATIQUE
-        // ============================
-
-        // Découpage en mots (tokens) avec une expression régulière
-        tokens = texte.match(/\b\w+\b/g) || [];
-
-        // Découpage en lignes (selon les retours à la ligne)
-        lignes = texte.split(/\r?\n/);
-
-        // On compte le nombre de lignes qui ne sont pas vides
-        const lignesNonVides = lignes.filter(l => l.trim() !== "");
-
-        // On affiche le résultat dans un paragraphe
-        document.getElementById("fileInfo").textContent =
-            `${fichier.name} chargé. ${tokens.length} tokens, ${lignesNonVides.length} lignes non vides.`;
-    };
-
-    reader.readAsText(fichier); // On déclenche la lecture du fichier
-});
-
-// ============================
-// ACTION 1 : DICTIONNAIRE
-// ============================
-
-// Cette fonction crée un dictionnaire des formes les plus fréquentes
-function dictionnaire() {
-    if (tokens.length === 0) {
-        alert("Veuillez charger un fichier avant d'utiliser le dictionnaire.");
-        return;
-    }
-
-    const freq = {}; // Objet pour stocker les fréquences des mots
-
-    // On parcourt tous les mots du texte
-    for (let mot of tokens) {
-        const forme = mot.toLowerCase(); // On met en minuscule
-        freq[forme] = (freq[forme] || 0) + 1; // On ajoute 1 à la fréquence
-    }
-
-    // On trie les mots par fréquence décroissante
-    const formesTriees = Object.entries(freq).sort((a, b) => b[1] - a[1]);
-
-    // On génère un tableau HTML pour l'afficher
-    let html = "<h2>Dictionnaire de formes</h2><table><tr><th>Forme</th><th>Fréquence</th></tr>";
-    for (let [forme, nb] of formesTriees) {
-        html += `<tr><td>${forme}</td><td>${nb}</td></tr>`;
-    }
-    html += "</table>";
-
-    document.getElementById("output").innerHTML = html; // On affiche le tableau
+// Cette fonction met en majuscules tout le texte entré dans la zone "texte"
+function mettreEnMajuscules() {
+  let texte = document.getElementById("texte").value; // On récupère le texte saisi
+  document.getElementById("texte").value = texte.toUpperCase(); // On transforme le texte en majuscules
 }
 
-// ============================
-// ACTION 2 : GREP
-// ============================
+// Cette fonction permet de charger un fichier texte local dans la zone "texte"
+function chargerFichier(event) {
+  let fichier = event.target.files[0]; // On prend le premier fichier sélectionné
+  if (!fichier) return; // Si aucun fichier, on ne fait rien
 
-// Cette fonction affiche les lignes qui contiennent un motif donné (regex)
-function grep() {
-    if (lignes.length === 0) {
-        alert("Veuillez charger un fichier avant d'utiliser grep.");
-        return;
-    }
-
-    const motif = prompt("Motif à rechercher (expression régulière) :"); // Demande à l'utilisateur
-    if (!motif) {
-        alert("Veuillez entrer un motif.");
-        return;
-    }
-
-    const regex = new RegExp(motif, "gi"); // Expression régulière insensible à la casse
-
-    let html = "<h2>Résultats Grep</h2>";
-
-    // On parcourt toutes les lignes du texte
-    for (let ligne of lignes) {
-        if (regex.test(ligne)) {
-            // On remplace les parties trouvées par une version colorée
-            const colorée = ligne.replace(regex, match => `<span class="highlight">${match}</span>`);
-            html += `<p>${colorée}</p>`;
-        }
-    }
-
-    document.getElementById("output").innerHTML = html; // On affiche les résultats
+  let lecteur = new FileReader(); // On crée un objet FileReader pour lire le contenu
+  lecteur.onload = function(e) {
+    let contenu = e.target.result; // Le texte du fichier est dans e.target.result
+    document.getElementById("texte").value = contenu; // On affiche le texte dans la zone "texte"
+  };
+  lecteur.readAsText(fichier); // On lit le fichier en tant que texte brut
 }
 
-// ============================
-// ACTION 3 : CONCORDANCIER
-// ============================
+// Cette fonction découpe le texte en lignes et en mots, puis affiche quelques statistiques
+function segmenterTexte() {
+  let texte = document.getElementById("texte").value; // Récupération du texte
+  let lignes = texte.split('\n'); // On découpe le texte en lignes avec retour à la ligne
+  let tokens = texte.split(/\s+/).filter(token => token !== ""); // On découpe en mots/tokens en supprimant les blancs vides
+  let nbLignes = lignes.filter(ligne => ligne.trim() !== "").length; // On compte les lignes non vides
+  let nbTokens = tokens.length; // On compte le nombre de mots/tokens
 
-// Cette fonction affiche un tableau avec contexte gauche, le mot, contexte droit
-function concordancier() {
-    if (lignes.length === 0) {
-        alert("Veuillez charger un fichier avant d'utiliser le concordancier.");
-        return;
-    }
+  let resultat = "Nombre de lignes non vides : " + nbLignes + "<br>";
+  resultat += "Nombre de mots/tokens : " + nbTokens;
 
-    const motif = prompt("Motif à rechercher (expression régulière) :");
-    if (!motif) {
-        alert("Veuillez entrer un motif.");
-        return;
-    }
-
-    // On cherche jusqu'à 30 caractères avant et après le mot trouvé
-    const regex = new RegExp(`(.{0,30})(${motif})(.{0,30})`, "gi");
-
-    let html = "<h2>Concordancier</h2><table><tr><th>Contexte gauche</th><th>Pôle</th><th>Contexte droit</th></tr>";
-
-    // Pour chaque ligne, on applique l'expression régulière
-    for (let ligne of lignes) {
-        let match;
-        while ((match = regex.exec(ligne)) !== null) {
-            const gauche = match[1];
-            const centre = `<span class="highlight">${match[2]}</span>`;
-            const droite = match[3];
-            html += `<tr><td>${gauche}</td><td>${centre}</td><td>${droite}</td></tr>`;
-        }
-    }
-
-    html += "</table>";
-    document.getElementById("output").innerHTML = html;
+  document.getElementById("resultat").innerHTML = resultat; // Affichage du résultat
 }
 
-// ============================
-// BOUTONS
-// ============================
+// Cette fonction construit un dictionnaire de formes avec la fréquence de chaque mot
+function dictionnaireFormes() {
+  let texte = document.getElementById("texte").value;
+  let mots = texte.toLowerCase().match(/\b\w+\b/g); // On extrait les mots avec une expression régulière
+  let dico = {}; // Objet pour stocker les mots et leurs fréquences
 
-// Ici on relie les boutons aux fonctions correspondantes
-document.getElementById("btnDico").addEventListener("click", dictionnaire);
-document.getElementById("btnGrep").addEventListener("click", grep);
-document.getElementById("btnConcordancier").addEventListener("click", concordancier);
+  if (mots) {
+    mots.forEach(function(mot) {
+      dico[mot] = (dico[mot] || 0) + 1; // On incrémente la fréquence du mot
+    });
+  }
+
+  let resultat = "<strong>Dictionnaire des formes (par fréquence) :</strong><br>";
+  for (let mot in dico) {
+    resultat += mot + " : " + dico[mot] + "<br>"; // On affiche chaque mot avec sa fréquence
+  }
+
+  document.getElementById("resultat").innerHTML = resultat;
+}
+
+// Cette fonction permet de chercher un motif dans le texte (comme grep) et de le surligner
+function chercherMotif() {
+  let motif = prompt("Entrez le motif à rechercher (expression régulière) :"); // Demande du motif à chercher
+  if (!motif) return;
+
+  let texte = document.getElementById("texte").value; // Récupère le texte
+  try {
+    let regex = new RegExp(motif, 'gi'); // Crée une RegExp insensible à la casse (g=global, i=insensible)
+    let resultat = texte.replace(regex, match => "<mark>" + match + "</mark>"); // Surligne les correspondances
+    document.getElementById("resultat").innerHTML = resultat;
+  } catch (e) {
+    alert("Expression régulière invalide."); // Si erreur, on avertit
+  }
+}
+
+// Cette fonction affiche un concordancier avec le mot sélectionné dans le texte
+function afficherConcordancier() {
+  let texte = document.getElementById("texte").value;
+  let selection = window.getSelection().toString().trim(); // Mot sélectionné par l’utilisateur
+
+  if (!selection) {
+    alert("Veuillez sélectionner un mot dans le texte.");
+    return;
+  }
+
+  let lignes = texte.split('\n'); // On découpe le texte en lignes
+  let resultat = "<strong>Concordancier pour : " + selection + "</strong><br>";
+
+  lignes.forEach(function(ligne) {
+    if (ligne.toLowerCase().includes(selection.toLowerCase())) { // Si la ligne contient le mot
+      resultat += "... " + ligne + " ...<br>"; // On ajoute la ligne au résultat
+    }
+  });
+
+  document.getElementById("resultat").innerHTML = resultat;
+}
+
+// Cette fonction remplace toutes les voyelles (minuscules et majuscules) par des slashes "/"
+function remplacerVoyelles() {
+  let texte = document.getElementById("texte").value; // On prend le texte
+  let texteModifie = texte.replace(/[aeiouyAEIOUY]/g, '/'); // On remplace chaque voyelle par "/"
+  document.getElementById("texte").value = texteModifie; // On met à jour le texte avec les remplacements
+}
