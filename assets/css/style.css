@@ -1,4 +1,3 @@
-html { /* pour cette partie, commentez et personnalisez au moins 12lignes. exemple ligne2 : font-size: 16px; font-size signifie "taille des caractères". px signifie .. et diffère de rem pour x raisons. */
 html {
 	/* Définit la taille du texte par défaut à 14 pixels */
 	font-size: 14px;
@@ -7,7 +6,7 @@ html {
 	/* Utilise une police à chasse fixe */
 	font-family: "Lucida Console", "Courier New", monospace;
 	/* Couleur de fond de la page : bleu clair */
-	background-color: #add8e6;
+	background-color: #8caeb9;
 }
 
 h1 {
@@ -73,7 +72,7 @@ td, th {
 
 .fade {
 	/* Bloc avec fond kaki et transition au survol */
-	background-color: DarkKhaki;
+	background-color: rgb(209, 191, 221);
 	color: Black;
 	transition: background-color 1s;
 	font-family: "Lucida Console", "Courier New", monospace;
@@ -81,7 +80,7 @@ td, th {
 
 .fade:hover {
 	/* Couleur de fond qui change au survol */
-	background-color: rgb(198 213 74);
+	background-color: rgb(209, 191, 221);
 }
 
 .mylabel {
@@ -98,7 +97,7 @@ td, th {
 
 #container {
 	/* Zone principale avec fond jaune, bordure et largeur définie */
-	background-color: #beb000;
+	background-color: #ffffff;
 	border: 3px solid black;
 	padding: 2px;
 	padding-bottom: 5%;
@@ -119,7 +118,7 @@ td, th {
 }
 
 #Global {
-	/* Conteneur général avec affichage en table */
+	
 	margin-right: auto;
 	margin-left: auto;
 	width: 80%;
@@ -155,7 +154,7 @@ td, th {
 }
 
 .special {
-	/* Bouton stylisé pour les effets spéciaux */
+	/* Bouton pour effets spéciaux */
 	position: relative;
 	padding: 0.9em;
 	border: none;
@@ -200,13 +199,13 @@ td, th {
 
 .special:hover:after,
 .special:hover:before {
-	/* Animation au survol : la bordure encadre le bouton */
+	
 	width: 100%;
 	height: 100%;
 }
 
 .rainbowBtn {
-	/* Bouton arc-en-ciel animé */
+	/* Bouton arc-en-ciel qui bouge */
 	display: block;
 	margin: auto;
 	width: 200px;
@@ -234,8 +233,6 @@ td, th {
 	0% { background-position: 0%; }
 	100% { background-position: 400%; }
 }
-
-
 
 
 
