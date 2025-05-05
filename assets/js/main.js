@@ -13,6 +13,25 @@ function date_heure() {
 	document.getElementById("logger1").innerHTML = "Nous sommes le " + jour + "/" + mois + "/" + annee + " et il est " + heure + "h " + minute + "min " + seconde + "s.";
 }
 
+// Fonction qui affiche la date et rend visible le bouton heure
+function afficherDateHeure() {
+    const now = new Date(); // Crée un objet Date avec l’heure actuelle
+    const date = now.toLocaleDateString("fr-FR"); // Format date français
+    document.getElementById("outputDateHeure").textContent = "Date : " + date;
+
+    // Affiche le bouton heure et masque celui de la date
+    document.getElementById("btn1").style.display = "none";
+    document.getElementById("btn2").style.display = "inline";
+}
+
+// Fonction qui affiche l’heure
+function afficherHeure() {
+    const now = new Date();
+    const heure = now.toLocaleTimeString("fr-FR"); // Format heure français
+    document.getElementById("outputDateHeure").textContent += "\nHeure : " + heure;
+}
+
+
 // Mettre en majuscules
 function maj() {
 	let text = document.getElementById("holder1").innerText;
