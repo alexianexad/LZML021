@@ -173,5 +173,3 @@ function concord() {
 	resultat += "</tbody></table>";
 	document.getElementById("page-analysis").innerHTML = matchFound ? resultat : "<p>Aucun contexte trouvé pour ce motif.</p>";
 }
-
-
