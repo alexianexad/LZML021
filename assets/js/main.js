@@ -1,5 +1,6 @@
 let tokens = []; // contiendra les tokens du document
 let lignes = []; // stocker les lignes du texte
+let texteOriginal = "";     // contiendra le texte brut du fichier
 
 // Afficher date et heure
 function date_heure() {
@@ -127,34 +128,24 @@ function dictionnaire() {
     document.getElementById("page-analysis").innerHTML = html;
 }
 
-function handleFileSelect(evt) {
-    const file = evt.target.files[0];
+function handleFileSelect(event) {
+  const file = event.target.files[0]; // on récupère le fichier sélectionné
+  if (!file) return; // si aucun fichier, on arrête
 
-    if (!file) {
-        alert("Aucun fichier sélectionné.");
-        return;
-    }
+  const reader = new FileReader(); // objet pour lire le fichier
+  reader.onload = function(e) {
+    const text = e.target.result; // contenu du fichier texte
+    document.getElementById("holder1").innerText = text; // on l'affiche dans la zone holder1
 
-    const reader = new FileReader();
-    reader.onload = function(e) {
-        const contents = e.target.result;
-        document.getElementById("fileDisplayArea").textContent = contents;
+    // ➕ Tu peux stocker le texte dans une variable globale si besoin :
+    texteOriginal = text;
 
-        // Segmentation automatique en lignes
-        lignes = contents.split(/\r?\n/); // coupe par sauts de ligne
-        const nonEmptyLines = lignes.filter(line => line.trim() !== "");
-
-        // Réinitialise les tokens (nécessite une segmentation manuelle)
-        tokens = [];
-
-        // Affiche un message avec le nombre de lignes
-        document.getElementById("page-analysis").innerHTML =
-            `<p style="color:green">Fichier chargé avec succès !<br>
-             Nombre de lignes : <b>${lignes.length}</b><br>
-             Lignes non vides : <b>${nonEmptyLines.length}</b></p>`;
-    };
-    reader.readAsText(file);
+    // ➕ Appeler ici segmentation automatique ou d'autres traitements :
+    segText(); // segmentation automatique si souhaitée
+  };
+  reader.readAsText(file); // on lit le fichier en tant que texte
 }
+
 
 function grep() {
     if (lignes.length === 0) {
